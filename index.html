@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mappa delle perdite idriche - Canicattì</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<style>
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+#map {
+  height: 100%;
+}
+
+.box {
+  position: absolute;
+  z-index: 1000;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  max-width: 430px;
+  background: white;
+  padding: 14px;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.25);
+}
+
+.box h1 {
+  font-size: 19px;
+  margin: 0 0 5px;
+}
+
+.box p {
+  font-size: 13px;
+  color: #555;
+  margin: 0;
+}
+
+.contatore {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 10px;
+  background: #fee2e2;
+  color: #991b1b;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.attiva {
+  color: #b91c1c;
+  font-weight: bold;
+}
+
+.foto {
+  margin-top: 10px;
+  padding: 15px;
+  background: #f3f4f6;
+  text-align: center;
+  border-radius: 8px;
+  color: #666;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h1>💧 Mappa delle perdite idriche – Canicattì</h1>
+<p>Tocca un punto rosso per visualizzare la segnalazione.</p>
+<div class="contatore">🔴 5 perdite segnalate</div>
+</div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+const map = L.map('map').setView([37.358, 13.850], 14);
+
+L.tileLayer(
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+{
+maxZoom: 19,
+attribution: '&copy; OpenStreetMap contributors'
+}
+).addTo(map);
+
+const perdite = [
+"Via Volturno 50",
+"Via Giuseppe Verdi 20",
+"Via Luigi Pirandello 67",
+"Via Duca degli Abruzzi 2",
+"Via Canova 3"
+];
+
+async function aggiungiPerdite() {
+
+let punti = [];
+
+for (const indirizzo of perdite) {
+
+try {
+
+const ricerca =
+encodeURIComponent(
+indirizzo + ", 92024 Canicattì, Agrigento, Italia"
+);
+
+const risposta = await fetch(
+"https://nominatim.openstreetmap.org/search?format=json&limit=1&q=" + ricerca
+);
+
+const dati = await risposta.json();
+
+if (dati.length > 0) {
+
+const lat = parseFloat(dati[0].lat);
+const lon = parseFloat(dati[0].lon);
+
+punti.push([lat, lon]);
+
+const marker = L.circleMarker(
+[lat, lon],
+{
+radius: 9,
+color: "white",
+weight: 3,
+fillColor: "#d71920",
+fillOpacity: 1
+}
+).addTo(map);
+
+marker.bindPopup(
+"<h3>💧 Perdita idrica</h3>" +
+"<strong>" + indirizzo + ", Canicattì</strong>" +
+"<br><br>" +
+"<span class='attiva'>🔴 PERDITA ATTIVA</span>" +
+"<div class='foto'>📷 Foto da aggiungere</div>"
+);
+
+}
+
+} catch(e) {
+console.log(indirizzo);
+}
+
+await new Promise(resolve => setTimeout(resolve, 1100));
+
+}
+
+if (punti.length > 0) {
+map.fitBounds(punti, {
+padding: [40,40],
+maxZoom: 16
+});
+}
+
+}
+
+aggiungiPerdite();
+
+</script>
+
+</body>
+</html>
