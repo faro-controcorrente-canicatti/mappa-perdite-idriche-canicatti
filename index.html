@@ -160,49 +160,42 @@ L.tileLayer(
    cambieremo solamente questi dati.
    ========================================== */
 
-const perdite = [
+const SUPABASE_URL = "https://zkwwxxmbikxpzedcmjxx.supabase.co";
+const SUPABASE_KEY = "sb_publishable_5usTyC1lIfP6ykIY456Glw_iJdy6NvP";
 
-{
-  indirizzo: "Via Volturno 50",
-  data: "Da inserire",
-  stato: "attiva",
-  note: "Nessuna nota inserita",
-  foto: ""
-},
+let perdite = [];
 
-{
-  indirizzo: "Via Giuseppe Verdi 20",
-  data: "Da inserire",
-  stato: "attiva",
-  note: "Nessuna nota inserita",
-  foto: ""
-},
+async function caricaPerdite() {
 
-{
-  indirizzo: "Via Luigi Pirandello 67",
-  data: "Da inserire",
-  stato: "attiva",
-  note: "Nessuna nota inserita",
-  foto: ""
-},
+  const risposta = await fetch(
+    SUPABASE_URL + "/rest/v1/perdite?select=*",
+    {
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": "Bearer " + SUPABASE_KEY
+      }
+    }
+  );
 
-{
-  indirizzo: "Via Duca degli Abruzzi 2",
-  data: "Da inserire",
-  stato: "attiva",
-  note: "Nessuna nota inserita",
-  foto: ""
-},
+  if (!risposta.ok) {
+    console.error("Errore Supabase:", await risposta.text());
+    return;
+  }
 
-{
-  indirizzo: "Via Canova 3",
-  data: "Da inserire",
-  stato: "attiva",
-  note: "Nessuna nota inserita",
-  foto: ""
+  const dati = await risposta.json();
+
+  perdite = dati.map(p => ({
+    id: p.id,
+    indirizzo: p.indirizzo,
+    data: p.data || "Da inserire",
+    stato: p.stato || "attiva",
+    note: p.note || "Nessuna nota inserita",
+    foto: p.foto_url || ""
+  }));
+
+  aggiornaContatori();
+  await aggiungiPerdite();
 }
-
-];
 
 
 /* CONTATORI AUTOMATICI */
@@ -370,7 +363,7 @@ punti,
 
 }
 
-aggiungiPerdite();
+caricaPerdite();
 
 </script>
 
