@@ -187,7 +187,7 @@ async function caricaPerdite() {
   perdite = dati.map(p => ({
     id: p.id,
     indirizzo: p.indirizzo,
-    data: p.data || "Da inserire",
+    data: p.data_segnalazione || "Da inserire",
     stato: p.stato || "attiva",
     note: p.note || "Nessuna nota inserita",
     foto: p.foto_url || ""
