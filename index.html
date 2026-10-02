@@ -3,12 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Mappa delle perdite idriche - Canicattì</title>
 
 <link rel="stylesheet"
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
+
 html, body {
   height: 100%;
   margin: 0;
@@ -43,39 +45,95 @@ html, body {
   margin: 0;
 }
 
+.contatori {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-top: 9px;
+}
+
 .contatore {
-  display: inline-block;
-  margin-top: 8px;
   padding: 6px 10px;
-  background: #fee2e2;
-  color: #991b1b;
   border-radius: 20px;
   font-weight: bold;
   font-size: 12px;
 }
 
-.attiva {
+.contatore-attive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.contatore-riparate {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.stato-attiva {
   color: #b91c1c;
   font-weight: bold;
 }
 
+.stato-riparata {
+  color: #15803d;
+  font-weight: bold;
+}
+
+.scheda {
+  min-width: 220px;
+  font-size: 14px;
+}
+
+.scheda h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.indirizzo {
+  font-size: 15px;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.dettagli {
+  margin-top: 12px;
+  line-height: 1.6;
+}
+
 .foto {
-  margin-top: 10px;
+  margin-top: 12px;
   padding: 15px;
   background: #f3f4f6;
   text-align: center;
   border-radius: 8px;
   color: #666;
 }
+
 </style>
 </head>
 
 <body>
 
 <div class="box">
+
 <h1>💧 Mappa delle perdite idriche – Canicattì</h1>
-<p>Tocca un punto rosso per visualizzare la segnalazione.</p>
-<div class="contatore">🔴 5 perdite segnalate</div>
+
+<p>
+Tocca un punto sulla mappa per visualizzare la scheda della segnalazione.
+</p>
+
+<div class="contatori">
+
+<div id="attive" class="contatore contatore-attive">
+🔴 0 perdite attive
+</div>
+
+<div id="riparate" class="contatore contatore-riparate">
+🟢 0 perdite riparate
+</div>
+
+</div>
+
 </div>
 
 <div id="map"></div>
@@ -89,34 +147,106 @@ const map = L.map('map').setView([37.358, 13.850], 14);
 L.tileLayer(
 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 {
-maxZoom: 19,
-attribution: '&copy; OpenStreetMap contributors'
+  maxZoom: 19,
+  attribution: '&copy; OpenStreetMap contributors'
 }
 ).addTo(map);
 
+
+/* ==========================================
+   ELENCO DELLE SEGNALAZIONI
+
+   Per modificare una perdita in futuro
+   cambieremo solamente questi dati.
+   ========================================== */
+
 const perdite = [
-"Via Volturno 50",
-"Via Giuseppe Verdi 20",
-"Via Luigi Pirandello 67",
-"Via Duca degli Abruzzi 2",
-"Via Canova 3"
+
+{
+  indirizzo: "Via Volturno 50",
+  data: "Da inserire",
+  stato: "attiva",
+  note: "Nessuna nota inserita",
+  foto: ""
+},
+
+{
+  indirizzo: "Via Giuseppe Verdi 20",
+  data: "Da inserire",
+  stato: "attiva",
+  note: "Nessuna nota inserita",
+  foto: ""
+},
+
+{
+  indirizzo: "Via Luigi Pirandello 67",
+  data: "Da inserire",
+  stato: "attiva",
+  note: "Nessuna nota inserita",
+  foto: ""
+},
+
+{
+  indirizzo: "Via Duca degli Abruzzi 2",
+  data: "Da inserire",
+  stato: "attiva",
+  note: "Nessuna nota inserita",
+  foto: ""
+},
+
+{
+  indirizzo: "Via Canova 3",
+  data: "Da inserire",
+  stato: "attiva",
+  note: "Nessuna nota inserita",
+  foto: ""
+}
+
 ];
+
+
+/* CONTATORI AUTOMATICI */
+
+function aggiornaContatori() {
+
+const attive =
+perdite.filter(p => p.stato === "attiva").length;
+
+const riparate =
+perdite.filter(p => p.stato === "riparata").length;
+
+document.getElementById("attive").innerHTML =
+"🔴 " + attive +
+(attive === 1 ? " perdita attiva" : " perdite attive");
+
+document.getElementById("riparate").innerHTML =
+"🟢 " + riparate +
+(riparate === 1 ? " perdita riparata" : " perdite riparate");
+
+}
+
+aggiornaContatori();
+
+
+/* CREAZIONE DELLA MAPPA */
 
 async function aggiungiPerdite() {
 
 let punti = [];
 
-for (const indirizzo of perdite) {
+for (const perdita of perdite) {
 
 try {
 
 const ricerca =
 encodeURIComponent(
-indirizzo + ", 92024 Canicattì, Agrigento, Italia"
+perdita.indirizzo +
+", 92024 Canicattì, Agrigento, Italia"
 );
 
 const risposta = await fetch(
-"https://nominatim.openstreetmap.org/search?format=json&limit=1&q=" + ricerca
+"https://nominatim.openstreetmap.org/search?format=json&limit=1&q=" +
+ricerca
 );
 
 const dati = await risposta.json();
@@ -128,40 +258,114 @@ const lon = parseFloat(dati[0].lon);
 
 punti.push([lat, lon]);
 
+
+/* COLORE AUTOMATICO DEL PUNTO */
+
+const colore =
+perdita.stato === "riparata"
+? "#16a34a"
+: "#d71920";
+
+
 const marker = L.circleMarker(
 [lat, lon],
 {
-radius: 9,
-color: "white",
-weight: 3,
-fillColor: "#d71920",
-fillOpacity: 1
+  radius: 9,
+  color: "white",
+  weight: 3,
+  fillColor: colore,
+  fillOpacity: 1
 }
 ).addTo(map);
 
+
+/* STATO DELLA PERDITA */
+
+const statoHTML =
+perdita.stato === "riparata"
+
+? "<span class='stato-riparata'>🟢 PERDITA RIPARATA</span>"
+
+: "<span class='stato-attiva'>🔴 PERDITA ATTIVA</span>";
+
+
+/* FOTO */
+
+const fotoHTML =
+perdita.foto
+
+? "<div class='foto'><img src='" +
+perdita.foto +
+"' style='width:100%;border-radius:8px;'></div>"
+
+: "<div class='foto'>📷 Foto da aggiungere</div>";
+
+
+/* SCHEDA TECNICA */
+
 marker.bindPopup(
+
+"<div class='scheda'>" +
+
 "<h3>💧 Perdita idrica</h3>" +
-"<strong>" + indirizzo + ", Canicattì</strong>" +
-"<br><br>" +
-"<span class='attiva'>🔴 PERDITA ATTIVA</span>" +
-"<div class='foto'>📷 Foto da aggiungere</div>"
+
+"<div class='indirizzo'>" +
+perdita.indirizzo +
+", Canicattì</div>" +
+
+"<div class='dettagli'>" +
+
+"<b>📅 Data segnalazione:</b> " +
+perdita.data +
+
+"<br>" +
+
+"<b>Stato:</b> " +
+statoHTML +
+
+"<br>" +
+
+"<b>📝 Note:</b> " +
+perdita.note +
+
+"</div>" +
+
+fotoHTML +
+
+"</div>"
+
 );
 
 }
 
 } catch(e) {
-console.log(indirizzo);
+
+console.log(
+"Errore caricamento:",
+perdita.indirizzo
+);
+
 }
 
-await new Promise(resolve => setTimeout(resolve, 1100));
+await new Promise(
+resolve => setTimeout(resolve, 1100)
+);
 
 }
+
+
+/* INQUADRATURA AUTOMATICA */
 
 if (punti.length > 0) {
-map.fitBounds(punti, {
-padding: [40,40],
-maxZoom: 16
-});
+
+map.fitBounds(
+punti,
+{
+  padding: [40,40],
+  maxZoom: 16
+}
+);
+
 }
 
 }
