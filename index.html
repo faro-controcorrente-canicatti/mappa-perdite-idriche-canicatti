@@ -10,7 +10,6 @@
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
-
 html, body {
   height: 100%;
   margin: 0;
@@ -69,6 +68,32 @@ html, body {
   color: #166534;
 }
 
+.azioni {
+  display: flex;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.azione {
+  flex: 1;
+  border: 0;
+  border-radius: 9px;
+  padding: 9px 5px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.segnala-perdita {
+  background: #dc2626;
+  color: white;
+}
+
+.segnala-riparazione {
+  background: #16a34a;
+  color: white;
+}
+
 .stato-attiva {
   color: #b91c1c;
   font-weight: bold;
@@ -109,6 +134,96 @@ html, body {
   color: #666;
 }
 
+.foto img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.modale {
+  display: none;
+  position: fixed;
+  z-index: 3000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,.55);
+  overflow: auto;
+}
+
+.modale-contenuto {
+  background: white;
+  margin: 7vh auto;
+  padding: 20px;
+  width: calc(100% - 50px);
+  max-width: 430px;
+  border-radius: 15px;
+  box-sizing: border-box;
+}
+
+.modale-contenuto h2 {
+  margin-top: 0;
+  font-size: 21px;
+}
+
+.modale-contenuto label {
+  display: block;
+  font-weight: bold;
+  margin-top: 13px;
+  margin-bottom: 5px;
+}
+
+.modale-contenuto input,
+.modale-contenuto textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.modale-contenuto textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.avviso {
+  margin-top: 12px;
+  padding: 10px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.chiudi {
+  float: right;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.invia {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  border: 0;
+  border-radius: 9px;
+  background: #2563eb;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+@media (max-width: 500px) {
+  .box h1 {
+    font-size: 18px;
+  }
+
+  .azione {
+    font-size: 11px;
+  }
+}
 </style>
 </head>
 
@@ -134,9 +249,75 @@ Tocca un punto sulla mappa per visualizzare la scheda della segnalazione.
 
 </div>
 
+<div class="azioni">
+
+<button class="azione segnala-perdita"
+onclick="apriModulo('perdita')">
+💧 Segnala una perdita
+</button>
+
+<button class="azione segnala-riparazione"
+onclick="apriModulo('riparazione')">
+✅ Segnala riparazione
+</button>
+
+</div>
+
 </div>
 
 <div id="map"></div>
+
+
+<!-- MODULO SEGNALAZIONE -->
+
+<div id="modale" class="modale">
+
+<div class="modale-contenuto">
+
+<span class="chiudi" onclick="chiudiModulo()">&times;</span>
+
+<h2 id="titoloModulo">Segnalazione</h2>
+
+<form id="formSegnalazione">
+
+<input type="hidden" id="tipoSegnalazione">
+
+<label for="nome">Nome e cognome</label>
+<input type="text" id="nome" required>
+
+<label for="indirizzoSegnalazione">Indirizzo</label>
+<input
+type="text"
+id="indirizzoSegnalazione"
+placeholder="Es. Via Roma 10, Canicattì"
+required>
+
+<label for="descrizione">Descrizione</label>
+<textarea
+id="descrizione"
+placeholder="Descrivi brevemente la situazione"
+required></textarea>
+
+<label for="fotoSegnalazione">Foto</label>
+<input
+type="file"
+id="fotoSegnalazione"
+accept="image/*">
+
+<div class="avviso">
+La segnalazione verrà sottoposta a verifica.
+L'invio <b>non comporta la pubblicazione automatica sulla mappa</b>.
+</div>
+
+<button type="submit" class="invia">
+Invia segnalazione
+</button>
+
+</form>
+
+</div>
+</div>
+
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -153,215 +334,333 @@ L.tileLayer(
 ).addTo(map);
 
 
-/* ==========================================
-   ELENCO DELLE SEGNALAZIONI
+/* SUPABASE */
 
-   Per modificare una perdita in futuro
-   cambieremo solamente questi dati.
-   ========================================== */
+const SUPABASE_URL =
+"https://zkwwxxmbikxpzedcmjxx.supabase.co";
 
-const SUPABASE_URL = "https://zkwwxxmbikxpzedcmjxx.supabase.co";
-const SUPABASE_KEY = "sb_publishable_5usTyC1lIfP6ykIY456Glw_iJdy6NvP";
+const SUPABASE_KEY =
+"sb_publishable_5usTyC1lIfP6ykIY456Glw_iJdy6NvP";
 
 let perdite = [];
 
+
+/* CARICAMENTO DATI */
+
 async function caricaPerdite() {
 
-  const risposta = await fetch(
-    SUPABASE_URL + "/rest/v1/perdite?select=*",
-    {
-      headers: {
-        "apikey": SUPABASE_KEY,
-        "Authorization": "Bearer " + SUPABASE_KEY
+  try {
+
+    const risposta = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/perdite?select=*&order=id.asc",
+      {
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY
+        }
       }
+    );
+
+    if (!risposta.ok) {
+      console.error(
+        "Errore Supabase:",
+        await risposta.text()
+      );
+      return;
     }
-  );
 
-  if (!risposta.ok) {
-    console.error("Errore Supabase:", await risposta.text());
-    return;
+    const dati = await risposta.json();
+
+    perdite = dati.map(p => ({
+      id: p.id,
+      indirizzo: p.indirizzo,
+      latitudine: p.latitudine,
+      longitudine: p.longitudine,
+      data: p.data_segnalazione || "Da inserire",
+      stato: (p.stato || "attiva").toLowerCase(),
+      note: p.note || "Nessuna nota inserita",
+      foto: p.foto_url || ""
+    }));
+
+    aggiornaContatori();
+    await aggiungiPerdite();
+
+  } catch (errore) {
+    console.error("Errore caricamento dati:", errore);
   }
-
-  const dati = await risposta.json();
-
-  perdite = dati.map(p => ({
-    id: p.id,
-    indirizzo: p.indirizzo,
-    data: p.data_segnalazione || "Da inserire",
-    stato: p.stato || "attiva",
-    note: p.note || "Nessuna nota inserita",
-    foto: p.foto_url || ""
-  }));
-
-  aggiornaContatori();
-  await aggiungiPerdite();
 }
 
 
-/* CONTATORI AUTOMATICI */
+/* CONTATORI */
 
 function aggiornaContatori() {
 
-const attive =
-perdite.filter(p => p.stato === "attiva").length;
+  const attive =
+    perdite.filter(p => p.stato === "attiva").length;
 
-const riparate =
-perdite.filter(p => p.stato === "riparata").length;
+  const riparate =
+    perdite.filter(p => p.stato === "riparata").length;
 
-document.getElementById("attive").innerHTML =
-"🔴 " + attive +
-(attive === 1 ? " perdita attiva" : " perdite attive");
+  document.getElementById("attive").innerHTML =
+    "🔴 " + attive +
+    (attive === 1
+      ? " perdita attiva"
+      : " perdite attive");
 
-document.getElementById("riparate").innerHTML =
-"🟢 " + riparate +
-(riparate === 1 ? " perdita riparata" : " perdite riparate");
-
+  document.getElementById("riparate").innerHTML =
+    "🟢 " + riparate +
+    (riparate === 1
+      ? " perdita riparata"
+      : " perdite riparate");
 }
 
-aggiornaContatori();
 
-
-/* CREAZIONE DELLA MAPPA */
+/* AGGIUNTA PUNTI ALLA MAPPA */
 
 async function aggiungiPerdite() {
 
-let punti = [];
+  const punti = [];
 
-for (const perdita of perdite) {
+  for (const perdita of perdite) {
 
-try {
+    try {
 
-const ricerca =
-encodeURIComponent(
-perdita.indirizzo +
-", 92024 Canicattì, Agrigento, Italia"
-);
+      let lat;
+      let lon;
 
-const risposta = await fetch(
-"https://nominatim.openstreetmap.org/search?format=json&limit=1&q=" +
-ricerca
-);
+      /*
+      Se in Supabase esistono già coordinate,
+      utilizziamo direttamente quelle.
+      */
 
-const dati = await risposta.json();
+      if (
+        perdita.latitudine != null &&
+        perdita.longitudine != null
+      ) {
 
-if (dati.length > 0) {
+        lat = parseFloat(perdita.latitudine);
+        lon = parseFloat(perdita.longitudine);
 
-const lat = parseFloat(dati[0].lat);
-const lon = parseFloat(dati[0].lon);
+      } else {
 
-punti.push([lat, lon]);
+        /*
+        Altrimenti cerchiamo l'indirizzo.
+        */
+
+        const ricerca = encodeURIComponent(
+          perdita.indirizzo +
+          ", Canicattì, Agrigento, Sicilia, Italia"
+        );
+
+        const risposta = await fetch(
+          "https://nominatim.openstreetmap.org/search" +
+          "?format=json&limit=1&countrycodes=it&q=" +
+          ricerca
+        );
+
+        if (!risposta.ok) {
+          console.log(
+            "Geocodifica non riuscita:",
+            perdita.indirizzo
+          );
+          continue;
+        }
+
+        const dati = await risposta.json();
+
+        if (!dati.length) {
+          console.log(
+            "Indirizzo non trovato:",
+            perdita.indirizzo
+          );
+          continue;
+        }
+
+        lat = parseFloat(dati[0].lat);
+        lon = parseFloat(dati[0].lon);
+
+        /*
+        Piccola pausa per non sovraccaricare
+        il servizio di ricerca indirizzi.
+        */
+        await new Promise(
+          resolve => setTimeout(resolve, 1200)
+        );
+      }
+
+      if (
+        !Number.isFinite(lat) ||
+        !Number.isFinite(lon)
+      ) {
+        continue;
+      }
+
+      punti.push([lat, lon]);
+
+      const colore =
+        perdita.stato === "riparata"
+        ? "#16a34a"
+        : "#d71920";
+
+      const marker = L.circleMarker(
+        [lat, lon],
+        {
+          radius: 9,
+          color: "white",
+          weight: 3,
+          fillColor: colore,
+          fillOpacity: 1
+        }
+      ).addTo(map);
 
 
-/* COLORE AUTOMATICO DEL PUNTO */
+      const statoHTML =
+        perdita.stato === "riparata"
+        ? "<span class='stato-riparata'>" +
+          "🟢 PERDITA RIPARATA</span>"
+        : "<span class='stato-attiva'>" +
+          "🔴 PERDITA ATTIVA</span>";
 
-const colore =
-perdita.stato === "riparata"
-? "#16a34a"
-: "#d71920";
+
+      const fotoHTML =
+        perdita.foto
+        ? "<div class='foto'>" +
+          "<img src='" +
+          perdita.foto +
+          "' alt='Foto della segnalazione'>" +
+          "</div>"
+        : "<div class='foto'>" +
+          "📷 Foto da aggiungere</div>";
 
 
-const marker = L.circleMarker(
-[lat, lon],
-{
-  radius: 9,
-  color: "white",
-  weight: 3,
-  fillColor: colore,
-  fillOpacity: 1
+      marker.bindPopup(
+
+        "<div class='scheda'>" +
+
+        "<h3>💧 Perdita idrica</h3>" +
+
+        "<div class='indirizzo'>" +
+        perdita.indirizzo +
+        ", Canicattì</div>" +
+
+        "<div class='dettagli'>" +
+
+        "<b>📅 Data segnalazione:</b> " +
+        perdita.data +
+
+        "<br>" +
+
+        "<b>Stato:</b> " +
+        statoHTML +
+
+        "<br>" +
+
+        "<b>📝 Note:</b> " +
+        perdita.note +
+
+        "</div>" +
+
+        fotoHTML +
+
+        "</div>"
+      );
+
+    } catch (errore) {
+
+      console.log(
+        "Errore con:",
+        perdita.indirizzo,
+        errore
+      );
+    }
+  }
+
+
+  /* INQUADRATURA AUTOMATICA */
+
+  if (punti.length === 1) {
+
+    map.setView(punti[0], 16);
+
+  } else if (punti.length > 1) {
+
+    map.fitBounds(
+      punti,
+      {
+        padding: [40,40],
+        maxZoom: 16
+      }
+    );
+  }
 }
-).addTo(map);
 
 
-/* STATO DELLA PERDITA */
+/* MODULO */
 
-const statoHTML =
-perdita.stato === "riparata"
+function apriModulo(tipo) {
 
-? "<span class='stato-riparata'>🟢 PERDITA RIPARATA</span>"
+  document.getElementById("tipoSegnalazione").value =
+    tipo;
 
-: "<span class='stato-attiva'>🔴 PERDITA ATTIVA</span>";
+  if (tipo === "riparazione") {
 
+    document.getElementById("titoloModulo").innerText =
+      "✅ Segnala una riparazione";
 
-/* FOTO */
+  } else {
 
-const fotoHTML =
-perdita.foto
+    document.getElementById("titoloModulo").innerText =
+      "💧 Segnala una nuova perdita";
+  }
 
-? "<div class='foto'><img src='" +
-perdita.foto +
-"' style='width:100%;border-radius:8px;'></div>"
-
-: "<div class='foto'>📷 Foto da aggiungere</div>";
-
-
-/* SCHEDA TECNICA */
-
-marker.bindPopup(
-
-"<div class='scheda'>" +
-
-"<h3>💧 Perdita idrica</h3>" +
-
-"<div class='indirizzo'>" +
-perdita.indirizzo +
-", Canicattì</div>" +
-
-"<div class='dettagli'>" +
-
-"<b>📅 Data segnalazione:</b> " +
-perdita.data +
-
-"<br>" +
-
-"<b>Stato:</b> " +
-statoHTML +
-
-"<br>" +
-
-"<b>📝 Note:</b> " +
-perdita.note +
-
-"</div>" +
-
-fotoHTML +
-
-"</div>"
-
-);
-
-}
-
-} catch(e) {
-
-console.log(
-"Errore caricamento:",
-perdita.indirizzo
-);
-
-}
-
-await new Promise(
-resolve => setTimeout(resolve, 1100)
-);
-
+  document.getElementById("modale").style.display =
+    "block";
 }
 
 
-/* INQUADRATURA AUTOMATICA */
+function chiudiModulo() {
 
-if (punti.length > 0) {
-
-map.fitBounds(
-punti,
-{
-  padding: [40,40],
-  maxZoom: 16
-}
-);
-
+  document.getElementById("modale").style.display =
+    "none";
 }
 
-}
+
+/*
+Per il momento il modulo NON modifica Supabase
+e NON inserisce punti sulla mappa.
+
+Nel prossimo passaggio collegheremo l'invio
+a una raccolta separata delle segnalazioni.
+*/
+
+document
+.getElementById("formSegnalazione")
+.addEventListener("submit", function(event) {
+
+  event.preventDefault();
+
+  alert(
+    "Modulo predisposto correttamente. " +
+    "Nel prossimo passaggio collegheremo " +
+    "l'invio delle segnalazioni."
+  );
+
+});
+
+
+window.onclick = function(event) {
+
+  const modale =
+    document.getElementById("modale");
+
+  if (event.target === modale) {
+    chiudiModulo();
+  }
+};
+
+
+/* AVVIO */
 
 caricaPerdite();
 
