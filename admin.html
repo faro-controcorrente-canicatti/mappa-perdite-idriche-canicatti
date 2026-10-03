@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestione segnalazioni - Canicattì</title>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  margin:0;
+  background:#f4f6f8;
+  color:#222;
+}
+header{
+  background:#1565c0;
+  color:white;
+  padding:20px;
+  text-align:center;
+}
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:15px;
+}
+.card{
+  background:white;
+  padding:18px;
+  margin-bottom:15px;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+input{
+  width:100%;
+  padding:13px;
+  box-sizing:border-box;
+  margin:6px 0;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-size:16px;
+}
+button{
+  border:0;
+  border-radius:8px;
+  padding:12px 16px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.login{
+  width:100%;
+  background:#1565c0;
+  color:white;
+  margin-top:8px;
+}
+.approva{
+  background:#198754;
+  color:white;
+  margin-right:8px;
+}
+.rifiuta{
+  background:#dc3545;
+  color:white;
+}
+.logout{
+  background:#555;
+  color:white;
+  float:right;
+}
+.badge{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:12px;
+  background:#fff3cd;
+  margin-bottom:10px;
+}
+.hidden{
+  display:none;
+}
+#messaggio{
+  margin-top:10px;
+  color:#b00020;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h2>💧 Gestione segnalazioni</h2>
+  <div>Mappa perdite idriche di Canicattì</div>
+</header>
+
+<div class="container">
+
+  <div id="loginBox" class="card">
+    <h3>Accesso amministratore</h3>
+    <input id="email" type="email" placeholder="E-mail">
+    <input id="password" type="password" placeholder="Password">
+    <button class="login" onclick="login()">Accedi</button>
+    <div id="messaggio"></div>
+  </div>
+
+  <div id="adminBox" class="hidden">
+    <button class="logout" onclick="logout()">Esci</button>
+    <h3>Segnalazioni da verificare</h3>
+    <div id="elenco">Caricamento...</div>
+  </div>
+
+</div>
+
+<script>
+const SUPABASE_URL =
+"https://zkwwxxmbikxpzedcmjxx.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_5usTycJ11ifP6ykIY456Glw_iJdy6NvP";
+
+let token = null;
+
+async function login(){
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  document.getElementById("messaggio").textContent = "Accesso...";
+
+  const r = await fetch(
+    SUPABASE_URL + "/auth/v1/token?grant_type=password",
+    {
+      method:"POST",
+      headers:{
+        "apikey":SUPABASE_KEY,
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        email:email,
+        password:password
+      })
+    }
+  );
+
+  const d = await r.json();
+
+  if(!r.ok || !d.access_token){
+    document.getElementById("messaggio").textContent =
+      "E-mail o password non corretti.";
+    return;
+  }
+
+  token = d.access_token;
+
+  document.getElementById("loginBox").classList.add("hidden");
+  document.getElementById("adminBox").classList.remove("hidden");
+
+  caricaSegnalazioni();
+}
+
+async function caricaSegnalazioni(){
+
+  const r = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/segnalazioni_cittadini?select=*&stato=neq.approvata&order=data_invio.desc",
+    {
+      headers:{
+        "apikey":SUPABASE_KEY,
+        "Authorization":"Bearer " + token
+      }
+    }
+  );
+
+  if(!r.ok){
+    document.getElementById("elenco").innerHTML =
+      "<p>Errore nel caricamento delle segnalazioni.</p>";
+    return;
+  }
+
+  const dati = await r.json();
+  const elenco = document.getElementById("elenco");
+
+  if(dati.length === 0){
+    elenco.innerHTML="<div class='card'>✅ Nessuna segnalazione da verificare.</div>";
+    return;
+  }
+
+  elenco.innerHTML="";
+
+  dati.forEach(s => {
+
+    const card=document.createElement("div");
+    card.className="card";
+
+    card.innerHTML=`
+      <span class="badge">${esc(s.stato || "in attesa")}</span>
+      <h3>${esc(s.indirizzo || "Indirizzo non indicato")}</h3>
+
+      <p>${esc(s.descrizione || "")}</p>
+
+      ${s.nome ? "<p><strong>Nome:</strong> "+esc(s.nome)+"</p>" : ""}
+      ${s.contatto ? "<p><strong>Contatto:</strong> "+esc(s.contatto)+"</p>" : ""}
+
+      <button class="approva"
+        onclick="cambiaStato(${Number(s.id)},'approvata')">
+        ✓ Approva
+      </button>
+
+      <button class="rifiuta"
+        onclick="cambiaStato(${Number(s.id)},'rifiutata')">
+        ✕ Rifiuta
+      </button>
+    `;
+
+    elenco.appendChild(card);
+  });
+}
+
+async function cambiaStato(id,stato){
+
+  const r = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/segnalazioni_cittadini?id=eq."+id,
+    {
+      method:"PATCH",
+      headers:{
+        "apikey":SUPABASE_KEY,
+        "Authorization":"Bearer "+token,
+        "Content-Type":"application/json",
+        "Prefer":"return=minimal"
+      },
+      body:JSON.stringify({stato:stato})
+    }
+  );
+
+  if(!r.ok){
+    alert("Non è stato possibile modificare la segnalazione.");
+    return;
+  }
+
+  caricaSegnalazioni();
+}
+
+function logout(){
+  token=null;
+  document.getElementById("adminBox").classList.add("hidden");
+  document.getElementById("loginBox").classList.remove("hidden");
+  document.getElementById("password").value="";
+  document.getElementById("messaggio").textContent="";
+}
+
+function esc(v){
+  return String(v)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+</script>
+
+</body>
+</html>
