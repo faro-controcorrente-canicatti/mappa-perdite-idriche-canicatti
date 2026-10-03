@@ -142,11 +142,11 @@ async function login(){
 
   const d = await r.json();
 
-  if(!r.ok || !d.access_token){
+if(!r.ok || !d.access_token){
     document.getElementById("messaggio").textContent =
-      "E-mail o password non corretti.";
+        "ERRORE SUPABASE: " + (d.msg || d.message || d.error_description || d.error || "Errore sconosciuto");
     return;
-  }
+}
 
   token = d.access_token;
 
