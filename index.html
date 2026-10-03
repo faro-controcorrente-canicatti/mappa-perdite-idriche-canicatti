@@ -1001,6 +1001,86 @@ document
 
 caricaPerdite();
 
+  /* ===== RECUPERO PASSWORD ===== */
+
+async function gestisciRecuperoPassword() {
+
+  const hash = window.location.hash;
+
+  if (!hash || !hash.includes("type=recovery")) {
+    return;
+  }
+
+  const params = new URLSearchParams(hash.substring(1));
+  const accessToken = params.get("access_token");
+
+  if (!accessToken) {
+    alert("Link di recupero password non valido o scaduto.");
+    return;
+  }
+
+  const nuovaPassword = prompt(
+    "Inserisci la nuova password (almeno 6 caratteri):"
+  );
+
+  if (!nuovaPassword) return;
+
+  if (nuovaPassword.length < 6) {
+    alert("La password deve contenere almeno 6 caratteri.");
+    return;
+  }
+
+  const confermaPassword = prompt(
+    "Inserisci nuovamente la password:"
+  );
+
+  if (nuovaPassword !== confermaPassword) {
+    alert("Le due password non coincidono.");
+    return;
+  }
+
+  try {
+
+    const risposta = await fetch(
+      SUPABASE_URL + "/auth/v1/user",
+      {
+        method: "PUT",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + accessToken,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          password: nuovaPassword
+        })
+      }
+    );
+
+    if (!risposta.ok) {
+      const errore = await risposta.json();
+      throw new Error(errore.message || "Errore");
+    }
+
+    alert("Password modificata correttamente!");
+
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname
+    );
+
+  } catch (errore) {
+
+    alert(
+      "Non è stato possibile modificare la password: " +
+      errore.message
+    );
+
+  }
+}
+
+gestisciRecuperoPassword();
+
 </script>
 
 </body>
