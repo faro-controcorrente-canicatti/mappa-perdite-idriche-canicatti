@@ -8,9 +8,7 @@
 
 <style>
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 :root{
   --blu:#1565c0;
@@ -181,29 +179,18 @@ button{
   color:#555;
 }
 
-.stat.totale{
-  border-left:5px solid #555;
-}
+.stat.totale{border-left:5px solid #555}
+.stat.nuove{border-left:5px solid var(--rosso)}
+.stat.verificate{border-left:5px solid #0d6efd}
+.stat.inoltrate{border-left:5px solid var(--viola)}
+.stat.attesa{border-left:5px solid var(--arancio)}
+.stat.risolte{border-left:5px solid var(--verde)}
 
-.stat.nuove{
-  border-left:5px solid #f0ad00;
-}
-
-.stat.verificate{
-  border-left:5px solid #0d6efd;
-}
-
-.stat.inoltrate{
-  border-left:5px solid var(--viola);
-}
-
-.stat.attesa{
-  border-left:5px solid var(--arancio);
-}
-
-.stat.risolte{
-  border-left:5px solid var(--verde);
-}
+.stat.nuove .numero{color:var(--rosso)}
+.stat.verificate .numero{color:#0d6efd}
+.stat.inoltrate .numero{color:var(--viola)}
+.stat.attesa .numero{color:var(--arancio)}
+.stat.risolte .numero{color:var(--verde)}
 
 /* RICERCA */
 
@@ -256,18 +243,65 @@ button{
   font-size:21px;
 }
 
+/* BADGE GENERICO */
+
 .badge{
   display:inline-block;
-  padding:6px 10px;
+  padding:7px 11px;
   border-radius:14px;
-  background:#fff3cd;
   font-size:13px;
-  margin:0 5px 6px 0;
+  font-weight:bold;
+  margin:0 5px 7px 0;
+}
+
+/* COLORI DEGLI STATI */
+
+.stato-in_attesa{
+  background:#fde8e8;
+  color:#b42318;
+  border:1px solid #f5b7b1;
+}
+
+.stato-verificata{
+  background:#e7f1ff;
+  color:#084298;
+  border:1px solid #b6d4fe;
+}
+
+.stato-inoltrata{
+  background:#f0e8ff;
+  color:#5a2ca0;
+  border:1px solid #d6c2f5;
+}
+
+.stato-attesa_ente{
+  background:#fff0df;
+  color:#a64b00;
+  border:1px solid #ffd2a6;
+}
+
+.stato-risolta{
+  background:#e5f6eb;
+  color:#146c43;
+  border:1px solid #a3cfbb;
+}
+
+.stato-chiusa{
+  background:#495057;
+  color:white;
+  border:1px solid #343a40;
+}
+
+.stato-rifiutata{
+  background:#e9ecef;
+  color:#495057;
+  border:1px solid #ced4da;
 }
 
 .badge-cat{
-  background:#e7f1ff;
-  color:#084298;
+  background:#eef4fb;
+  color:#315b7d;
+  border:1px solid #d6e4f0;
 }
 
 .apri{
@@ -366,8 +400,34 @@ button{
 }
 
 .rifiuta{
-  background:var(--rosso);
+  background:#d97706;
   color:white;
+}
+
+.elimina{
+  background:#b42318;
+  color:white;
+}
+
+.danger-zone{
+  margin-top:28px;
+  padding:16px;
+  background:#fff5f5;
+  border:1px solid #f5c2c7;
+  border-radius:12px;
+}
+
+.danger-zone strong{
+  display:block;
+  color:#842029;
+  margin-bottom:7px;
+}
+
+.danger-zone p{
+  margin:0 0 12px;
+  font-size:14px;
+  line-height:1.45;
+  color:#664d4d;
 }
 
 #messaggioDettaglio{
@@ -440,6 +500,10 @@ button{
     margin:8px auto;
     padding:17px;
   }
+
+  .actions button{
+    flex:1 1 100%;
+  }
 }
 
 /* STAMPA */
@@ -468,7 +532,8 @@ button{
   }
 
   .actions,
-  .chiudi{
+  .chiudi,
+  .danger-zone{
     display:none!important;
   }
 }
@@ -567,9 +632,7 @@ button{
     </div>
   </div>
 
-  <div id="dashboardCards"
-    class="dashboard">
-  </div>
+  <div id="dashboardCards" class="dashboard"></div>
 
   <div class="card">
 
@@ -598,8 +661,7 @@ button{
 
 <!-- SEGNALAZIONI -->
 
-<section id="sezioneSegnalazioni"
-  class="hidden">
+<section id="sezioneSegnalazioni" class="hidden">
 
   <div class="section-title">
     <h2>📥 Tutte le segnalazioni</h2>
@@ -619,9 +681,7 @@ button{
 
     </div>
 
-    <select
-      id="filtroStato"
-      onchange="renderSegnalazioni()">
+    <select id="filtroStato" onchange="renderSegnalazioni()">
 
       <option value="">Tutti gli stati</option>
       <option value="in_attesa">In attesa di verifica</option>
@@ -634,9 +694,7 @@ button{
 
     </select>
 
-    <select
-      id="filtroCategoria"
-      onchange="renderSegnalazioni()">
+    <select id="filtroCategoria" onchange="renderSegnalazioni()">
 
       <option value="">Tutte le categorie</option>
       <option value="strade">Strade e marciapiedi</option>
@@ -659,55 +717,42 @@ button{
 
 <!-- CATEGORIE -->
 
-<section id="sezioneCategorie"
-  class="hidden">
+<section id="sezioneCategorie" class="hidden">
 
   <div class="section-title">
-
     <h2>🗂️ Categorie</h2>
-
     <div class="meta">
       Seleziona una categoria per vedere le pratiche
     </div>
-
   </div>
 
-  <div id="categorieGrid"
-    class="categorie-grid">
-  </div>
+  <div id="categorieGrid" class="categorie-grid"></div>
 
 </section>
 
 
 <!-- STATI -->
 
-<section id="sezioneStati"
-  class="hidden">
+<section id="sezioneStati" class="hidden">
 
   <div class="section-title">
     <h2>🔄 Stato delle pratiche</h2>
   </div>
 
-  <div id="statiGrid"
-    class="categorie-grid">
-  </div>
+  <div id="statiGrid" class="categorie-grid"></div>
 
 </section>
 
 
 <!-- ARCHIVIO -->
 
-<section id="sezioneArchivio"
-  class="hidden">
+<section id="sezioneArchivio" class="hidden">
 
   <div class="section-title">
-
     <h2>📁 Archivio</h2>
-
     <div class="meta">
       Pratiche concluse o rifiutate
     </div>
-
   </div>
 
   <div id="archivio"></div>
@@ -717,27 +762,20 @@ button{
 
 <!-- STATISTICHE -->
 
-<section id="sezioneStatistiche"
-  class="hidden">
+<section id="sezioneStatistiche" class="hidden">
 
   <div class="section-title">
     <h2>📊 Statistiche</h2>
   </div>
 
   <div class="card">
-
     <h3>Segnalazioni per categoria</h3>
-
     <div id="statisticheCategorie"></div>
-
   </div>
 
   <div class="card">
-
     <h3>Segnalazioni per stato</h3>
-
     <div id="statisticheStati"></div>
-
   </div>
 
 </section>
@@ -749,8 +787,7 @@ button{
 
 <!-- DETTAGLIO PRATICA -->
 
-<div id="dettaglio"
-  class="dettaglio hidden">
+<div id="dettaglio" class="dettaglio hidden">
 
 <div class="dettaglio-box">
 
@@ -758,113 +795,60 @@ button{
 
     <h2>Dettaglio segnalazione</h2>
 
-    <button
-      class="chiudi"
-      onclick="chiudiDettaglio()">
+    <button class="chiudi" onclick="chiudiDettaglio()">
       ✕
     </button>
 
   </div>
 
-  <p id="numeroPratica"
-    class="meta"></p>
+  <p id="numeroPratica" class="meta"></p>
 
   <div id="fotoBox"></div>
 
-
-  <!-- DATI SEGNALAZIONE -->
 
   <div class="pratica-section">
 
     <h3>📍 Dati della segnalazione</h3>
 
-    <label>
-      <strong>Indirizzo</strong>
-    </label>
-
+    <label><strong>Indirizzo</strong></label>
     <input id="dIndirizzo">
 
-
-    <label>
-      <strong>Categoria</strong>
-    </label>
+    <label><strong>Categoria</strong></label>
 
     <select id="dCategoria">
 
-      <option value="strade">
-        Buche, strade e marciapiedi
-      </option>
-
-      <option value="acqua">
-        Perdite d'acqua e problemi idrici
-      </option>
-
-      <option value="rifiuti">
-        Rifiuti e pulizia
-      </option>
-
-      <option value="illuminazione">
-        Illuminazione pubblica
-      </option>
-
-      <option value="verde">
-        Verde pubblico
-      </option>
-
-      <option value="segnaletica">
-        Segnaletica e sicurezza stradale
-      </option>
-
-      <option value="degrado">
-        Degrado urbano
-      </option>
-
-      <option value="altro">
-        Altro
-      </option>
+      <option value="strade">Buche, strade e marciapiedi</option>
+      <option value="acqua">Perdite d'acqua e problemi idrici</option>
+      <option value="rifiuti">Rifiuti e pulizia</option>
+      <option value="illuminazione">Illuminazione pubblica</option>
+      <option value="verde">Verde pubblico</option>
+      <option value="segnaletica">Segnaletica e sicurezza stradale</option>
+      <option value="degrado">Degrado urbano</option>
+      <option value="altro">Altro</option>
 
     </select>
 
-
-    <label>
-      <strong>Descrizione</strong>
-    </label>
-
+    <label><strong>Descrizione</strong></label>
     <textarea id="dDescrizione"></textarea>
 
   </div>
 
 
-  <!-- CITTADINO -->
-
   <div class="pratica-section">
 
     <h3>👤 Dati del cittadino</h3>
 
-    <label>
-      <strong>Nome e cognome</strong>
-    </label>
-
+    <label><strong>Nome e cognome</strong></label>
     <input id="dNome">
 
-
-    <label>
-      <strong>Telefono</strong>
-    </label>
-
+    <label><strong>Telefono</strong></label>
     <input id="dTelefono">
 
-
-    <label>
-      <strong>Email</strong>
-    </label>
-
+    <label><strong>Email</strong></label>
     <input id="dEmail">
 
   </div>
 
-
-  <!-- GESTIONE PRATICA -->
 
   <div class="pratica-section">
 
@@ -876,128 +860,95 @@ button{
       della segnalazione.
     </div>
 
-
-    <label>
-      <strong>Stato della pratica</strong>
-    </label>
+    <label><strong>Stato della pratica</strong></label>
 
     <select id="dStato">
 
-      <option value="in_attesa">
-        In attesa di verifica
-      </option>
-
-      <option value="verificata">
-        Documentazione verificata
-      </option>
-
-      <option value="inoltrata">
-        Inoltrata all'ente
-      </option>
-
-      <option value="attesa_ente">
-        In attesa dell'ente
-      </option>
-
-      <option value="risolta">
-        Risolta
-      </option>
-
-      <option value="chiusa">
-        Chiusa
-      </option>
-
-      <option value="rifiutata">
-        Rifiutata
-      </option>
+      <option value="in_attesa">🔴 In attesa di verifica</option>
+      <option value="verificata">🔵 Documentazione verificata</option>
+      <option value="inoltrata">🟣 Inoltrata all'ente</option>
+      <option value="attesa_ente">🟠 In attesa dell'ente</option>
+      <option value="risolta">🟢 Risolta</option>
+      <option value="chiusa">⚫ Chiusa</option>
+      <option value="rifiutata">⚪ Rifiutata</option>
 
     </select>
 
-
-    <label>
-      <strong>Ente / ufficio destinatario</strong>
-    </label>
+    <label><strong>Ente / ufficio destinatario</strong></label>
 
     <input
       id="dEnte"
       placeholder="Es. Comune di Canicattì - Ufficio Tecnico, AICA...">
 
-
-    <label>
-      <strong>Data di inoltro</strong>
-    </label>
+    <label><strong>Data di inoltro</strong></label>
 
     <input
       id="dDataInoltro"
       type="datetime-local">
 
-
-    <label>
-      <strong>Protocollo / riferimento</strong>
-    </label>
+    <label><strong>Protocollo / riferimento</strong></label>
 
     <input
       id="dProtocollo"
       placeholder="Numero protocollo, PEC o altro riferimento">
 
-
-    <label>
-      <strong>Note interne</strong>
-    </label>
+    <label><strong>Note interne</strong></label>
 
     <textarea
       id="dNoteInterne"
-      placeholder="Annotazioni interne sulla gestione della pratica...">
-    </textarea>
+      placeholder="Annotazioni interne sulla gestione della pratica..."></textarea>
 
   </div>
 
-
-  <!-- RISPOSTA ENTE -->
 
   <div class="pratica-section">
 
     <h3>🏛️ Risposta dell'ente</h3>
 
-    <label>
-      <strong>Data della risposta</strong>
-    </label>
+    <label><strong>Data della risposta</strong></label>
 
     <input
       id="dDataRisposta"
       type="datetime-local">
 
-
-    <label>
-      <strong>Risposta / esito comunicato</strong>
-    </label>
+    <label><strong>Risposta / esito comunicato</strong></label>
 
     <textarea
       id="dRispostaEnte"
-      placeholder="Inserisci la risposta ricevuta dall'ente o l'esito della pratica...">
-    </textarea>
+      placeholder="Inserisci la risposta ricevuta dall'ente o l'esito della pratica..."></textarea>
 
   </div>
 
 
   <div class="actions">
 
-    <button
-      class="salva"
-      onclick="salvaPratica()">
+    <button class="salva" onclick="salvaPratica()">
       💾 Salva pratica
     </button>
 
-    <button
-      class="stampa"
-      onclick="window.print()">
+    <button class="stampa" onclick="window.print()">
       🖨️ Stampa
     </button>
 
-    <button
-      class="rifiuta"
-      onclick="rifiutaPratica()">
+    <button class="rifiuta" onclick="rifiutaPratica()">
       ✕ Rifiuta
+    </button>
+
+  </div>
+
+
+  <div class="danger-zone">
+
+    <strong>🗑️ Eliminazione definitiva</strong>
+
+    <p>
+      Usa questa funzione solo per prove, duplicati, spam
+      o segnalazioni che non devono essere conservate.
+      L'eliminazione non può essere annullata.
+    </p>
+
+    <button class="elimina" onclick="eliminaPratica()">
+      🗑️ Elimina definitivamente
     </button>
 
   </div>
@@ -1022,9 +973,7 @@ let praticaCorrente = null;
 let tutteSegnalazioni = [];
 
 
-/* =========================
-   LOGIN
-========================= */
+/* LOGIN */
 
 async function login(){
 
@@ -1051,10 +1000,8 @@ async function login(){
   try{
 
     const r = await fetch(
-
       SUPABASE_URL +
       "/auth/v1/token?grant_type=password",
-
       {
         method:"POST",
 
@@ -1113,21 +1060,17 @@ async function login(){
 }
 
 
-/* =========================
-   CARICA SEGNALAZIONI
-========================= */
+/* CARICA */
 
 async function caricaSegnalazioni(){
 
   try{
 
     const r = await fetch(
-
       SUPABASE_URL +
       "/rest/v1/segnalazioni_cittadini" +
       "?select=*" +
       "&order=data_invio.desc",
-
       {
         headers:{
           "apikey":SUPABASE_KEY,
@@ -1138,8 +1081,7 @@ async function caricaSegnalazioni(){
 
     if(!r.ok){
 
-      const errore =
-        await r.text();
+      const errore = await r.text();
 
       alert(
         "Errore caricamento segnalazioni:\n" +
@@ -1165,10 +1107,6 @@ async function caricaSegnalazioni(){
 }
 
 
-/* =========================
-   AGGIORNA
-========================= */
-
 function aggiornaInterfaccia(){
 
   renderDashboard();
@@ -1180,9 +1118,7 @@ function aggiornaInterfaccia(){
 }
 
 
-/* =========================
-   MENU
-========================= */
+/* MENU */
 
 function mostraSezione(nome){
 
@@ -1213,15 +1149,11 @@ function mostraSezione(nome){
     nome.slice(1);
 
   document
-    .getElementById(
-      "sezione"+nomeMaiuscolo
-    )
+    .getElementById("sezione"+nomeMaiuscolo)
     .classList.remove("hidden");
 
   const b =
-    document.getElementById(
-      "m"+nomeMaiuscolo
-    );
+    document.getElementById("m"+nomeMaiuscolo);
 
   if(b)
     b.classList.add("attivo");
@@ -1233,9 +1165,7 @@ function mostraSezione(nome){
 }
 
 
-/* =========================
-   DASHBOARD
-========================= */
+/* DASHBOARD */
 
 function contaStato(stato){
 
@@ -1248,57 +1178,44 @@ function contaStato(stato){
 function renderDashboard(){
 
   const box =
-    document.getElementById(
-      "dashboardCards"
-    );
+    document.getElementById("dashboardCards");
 
   box.innerHTML =
-
     statCard(
       tutteSegnalazioni.length,
       "Totale pratiche",
       "totale",
       ""
     )
-
     +
-
     statCard(
       contaStato("in_attesa"),
       "Da verificare",
       "nuove",
       "in_attesa"
     )
-
     +
-
     statCard(
       contaStato("verificata"),
       "Verificate",
       "verificate",
       "verificata"
     )
-
     +
-
     statCard(
       contaStato("inoltrata"),
       "Inoltrate",
       "inoltrate",
       "inoltrata"
     )
-
     +
-
     statCard(
       contaStato("attesa_ente"),
       "In attesa ente",
       "attesa",
       "attesa_ente"
     )
-
     +
-
     statCard(
       contaStato("risolta"),
       "Risolte",
@@ -1306,37 +1223,26 @@ function renderDashboard(){
       "risolta"
     );
 
-
   const ultime =
     tutteSegnalazioni.slice(0,5);
 
   const contenitore =
-    document.getElementById(
-      "ultimeSegnalazioni"
-    );
+    document.getElementById("ultimeSegnalazioni");
 
   contenitore.innerHTML =
     ultime.length
     ?
     ultime.map(cardHTML).join("")
     :
-    "<div class='card empty'>" +
-    "Nessuna segnalazione." +
-    "</div>";
+    "<div class='card empty'>Nessuna segnalazione.</div>";
 
   collegaPulsanti(contenitore);
 }
 
 
-function statCard(
-  numero,
-  titolo,
-  classe,
-  stato
-){
+function statCard(numero,titolo,classe,stato){
 
   return `
-
     <div
       class="stat ${classe}"
       onclick="vaiAStato('${stato}')">
@@ -1350,24 +1256,20 @@ function statCard(
       </span>
 
     </div>
-
   `;
 }
 
 
 function vaiAStato(stato){
 
-  document
-    .getElementById("filtroStato")
-    .value = stato;
+  document.getElementById("filtroStato").value =
+    stato;
 
-  document
-    .getElementById("filtroCategoria")
-    .value = "";
+  document.getElementById("filtroCategoria").value =
+    "";
 
-  document
-    .getElementById("ricerca")
-    .value = "";
+  document.getElementById("ricerca").value =
+    "";
 
   mostraSezione("segnalazioni");
 
@@ -1378,24 +1280,19 @@ function vaiAStato(stato){
 function ricercaDaDashboard(){
 
   const testo =
-    document
-      .getElementById("ricercaDashboard")
-      .value;
+    document.getElementById("ricercaDashboard").value;
 
   if(!testo.trim())
     return;
 
-  document
-    .getElementById("ricerca")
-    .value = testo;
+  document.getElementById("ricerca").value =
+    testo;
 
-  document
-    .getElementById("filtroStato")
-    .value = "";
+  document.getElementById("filtroStato").value =
+    "";
 
-  document
-    .getElementById("filtroCategoria")
-    .value = "";
+  document.getElementById("filtroCategoria").value =
+    "";
 
   mostraSezione("segnalazioni");
 
@@ -1403,9 +1300,7 @@ function ricercaDaDashboard(){
 }
 
 
-/* =========================
-   ELENCO
-========================= */
+/* ELENCO */
 
 function renderSegnalazioni(){
 
@@ -1414,42 +1309,30 @@ function renderSegnalazioni(){
 
   const ricerca =
     (
-      document
-        .getElementById("ricerca")
-        .value || ""
+      document.getElementById("ricerca").value ||
+      ""
     )
     .toLowerCase()
     .trim();
 
   const stato =
-    document
-      .getElementById("filtroStato")
-      .value;
+    document.getElementById("filtroStato").value;
 
   const categoria =
-    document
-      .getElementById("filtroCategoria")
-      .value;
+    document.getElementById("filtroCategoria").value;
 
   const filtrate =
     tutteSegnalazioni.filter(s=>{
 
-      if(
-        stato &&
-        s.stato!==stato
-      )
+      if(stato && s.stato!==stato)
         return false;
 
-      if(
-        categoria &&
-        s.categoria!==categoria
-      )
+      if(categoria && s.categoria!==categoria)
         return false;
 
       if(ricerca){
 
         const testo = [
-
           s.id,
           s.indirizzo,
           s.descrizione,
@@ -1461,7 +1344,6 @@ function renderSegnalazioni(){
           s.protocollo,
           nomeCategoria(s.categoria),
           nomeStatoRaw(s.stato)
-
         ]
         .join(" ")
         .toLowerCase();
@@ -1473,7 +1355,6 @@ function renderSegnalazioni(){
       return true;
     });
 
-
   if(!filtrate.length){
 
     elenco.innerHTML =
@@ -1484,19 +1365,14 @@ function renderSegnalazioni(){
     return;
   }
 
-
   elenco.innerHTML =
-    filtrate
-      .map(cardHTML)
-      .join("");
+    filtrate.map(cardHTML).join("");
 
   collegaPulsanti(elenco);
 }
 
 
-/* =========================
-   CARD PRATICA
-========================= */
+/* CARD */
 
 function cardHTML(s){
 
@@ -1504,7 +1380,7 @@ function cardHTML(s){
 
     <div class="card segnalazione">
 
-      <span class="badge">
+      <span class="badge ${classeStato(s.stato)}">
         ${esc(nomeStatoRaw(s.stato))}
       </span>
 
@@ -1546,9 +1422,8 @@ function cardHTML(s){
           s.data_invio
           ?
           " · " +
-          new Date(
-            s.data_invio
-          ).toLocaleString("it-IT")
+          new Date(s.data_invio)
+            .toLocaleString("it-IT")
           :
           ""
         }
@@ -1558,9 +1433,7 @@ function cardHTML(s){
       <button
         class="apri"
         data-id="${Number(s.id)}">
-
         Apri pratica
-
       </button>
 
     </div>
@@ -1569,9 +1442,7 @@ function cardHTML(s){
 }
 
 
-function collegaPulsanti(
-  contenitore
-){
+function collegaPulsanti(contenitore){
 
   contenitore
     .querySelectorAll(".apri")
@@ -1582,14 +1453,11 @@ function collegaPulsanti(
         ()=>{
 
           const id =
-            Number(
-              btn.dataset.id
-            );
+            Number(btn.dataset.id);
 
           const s =
             tutteSegnalazioni.find(
-              x=>
-                Number(x.id)===id
+              x=>Number(x.id)===id
             );
 
           if(s)
@@ -1601,36 +1469,23 @@ function collegaPulsanti(
 }
 
 
-/* =========================
-   CATEGORIE
-========================= */
+/* CATEGORIE */
 
 function renderCategorie(){
 
   const categorie = [
-
     ["strade","🛣️","Strade e marciapiedi"],
-
     ["acqua","💧","Acqua"],
-
     ["rifiuti","🗑️","Rifiuti e pulizia"],
-
     ["illuminazione","💡","Illuminazione pubblica"],
-
     ["verde","🌳","Verde pubblico"],
-
     ["segnaletica","🚦","Segnaletica e sicurezza"],
-
     ["degrado","🏚️","Degrado urbano"],
-
     ["altro","📌","Altro"]
-
   ];
 
   const box =
-    document.getElementById(
-      "categorieGrid"
-    );
+    document.getElementById("categorieGrid");
 
   box.innerHTML =
     categorie.map(c=>{
@@ -1668,17 +1523,14 @@ function renderCategorie(){
 
 function vaiACategoria(cat){
 
-  document
-    .getElementById("filtroCategoria")
-    .value = cat;
+  document.getElementById("filtroCategoria").value =
+    cat;
 
-  document
-    .getElementById("filtroStato")
-    .value = "";
+  document.getElementById("filtroStato").value =
+    "";
 
-  document
-    .getElementById("ricerca")
-    .value = "";
+  document.getElementById("ricerca").value =
+    "";
 
   mostraSezione("segnalazioni");
 
@@ -1686,34 +1538,21 @@ function vaiACategoria(cat){
 }
 
 
-/* =========================
-   STATI
-========================= */
+/* STATI */
 
 function renderStati(){
 
   const stati = [
-
-    ["in_attesa","⏳","In attesa di verifica"],
-
-    ["verificata","✅","Documentazione verificata"],
-
-    ["inoltrata","📤","Inoltrate all'ente"],
-
-    ["attesa_ente","🏛️","In attesa dell'ente"],
-
-    ["risolta","✔️","Risolte"],
-
-    ["chiusa","📁","Chiuse"],
-
-    ["rifiutata","❌","Rifiutate"]
-
+    ["in_attesa","🔴","In attesa di verifica"],
+    ["verificata","🔵","Documentazione verificata"],
+    ["inoltrata","🟣","Inoltrate all'ente"],
+    ["attesa_ente","🟠","In attesa dell'ente"],
+    ["risolta","🟢","Risolte"],
+    ["chiusa","⚫","Chiuse"],
+    ["rifiutata","⚪","Rifiutate"]
   ];
 
-  document
-    .getElementById("statiGrid")
-    .innerHTML =
-
+  document.getElementById("statiGrid").innerHTML =
     stati.map(s=>`
 
       <div
@@ -1738,9 +1577,7 @@ function renderStati(){
 }
 
 
-/* =========================
-   ARCHIVIO
-========================= */
+/* ARCHIVIO */
 
 function renderArchivio(){
 
@@ -1753,9 +1590,7 @@ function renderArchivio(){
     );
 
   const box =
-    document.getElementById(
-      "archivio"
-    );
+    document.getElementById("archivio");
 
   if(!archiviate.length){
 
@@ -1768,17 +1603,13 @@ function renderArchivio(){
   }
 
   box.innerHTML =
-    archiviate
-      .map(cardHTML)
-      .join("");
+    archiviate.map(cardHTML).join("");
 
   collegaPulsanti(box);
 }
 
 
-/* =========================
-   STATISTICHE
-========================= */
+/* STATISTICHE */
 
 function renderStatistiche(){
 
@@ -1803,42 +1634,27 @@ function renderStatistiche(){
     "rifiutata"
   ];
 
-
   renderBarre(
-
     "statisticheCategorie",
-
     cat.map(c=>[
-
       nomeCategoria(c),
-
       tutteSegnalazioni.filter(
         s=>s.categoria===c
       ).length
-
     ])
   );
 
-
   renderBarre(
-
     "statisticheStati",
-
     stati.map(s=>[
-
       nomeStatoRaw(s),
-
       contaStato(s)
-
     ])
   );
 }
 
 
-function renderBarre(
-  id,
-  dati
-){
+function renderBarre(id,dati){
 
   const max =
     Math.max(
@@ -1846,10 +1662,7 @@ function renderBarre(
       ...dati.map(x=>x[1])
     );
 
-  document
-    .getElementById(id)
-    .innerHTML =
-
+  document.getElementById(id).innerHTML =
     dati.map(x=>{
 
       const percentuale =
@@ -1860,24 +1673,15 @@ function renderBarre(
         <div class="statistiche-riga">
 
           <strong>
-
-            <span>
-              ${esc(x[0])}
-            </span>
-
-            <span>
-              ${x[1]}
-            </span>
-
+            <span>${esc(x[0])}</span>
+            <span>${x[1]}</span>
           </strong>
 
           <div class="barra">
-
             <div
               class="barra-interna"
               style="width:${percentuale}%">
             </div>
-
           </div>
 
         </div>
@@ -1888,163 +1692,75 @@ function renderBarre(
 }
 
 
-/* =========================
-   APRI PRATICA
-========================= */
+/* APRI PRATICA */
 
 function apriPratica(s){
 
   praticaCorrente = s;
 
-  document
-    .getElementById(
-      "numeroPratica"
-    )
-    .textContent =
-
+  document.getElementById("numeroPratica").textContent =
     "Pratica #" + s.id +
-
     (
       s.data_invio
       ?
       " — ricevuta il " +
-      new Date(
-        s.data_invio
-      ).toLocaleString("it-IT")
+      new Date(s.data_invio)
+        .toLocaleString("it-IT")
       :
       ""
     );
 
-
-  document
-    .getElementById(
-      "dIndirizzo"
-    )
-    .value =
+  document.getElementById("dIndirizzo").value =
     s.indirizzo || "";
 
-
-  document
-    .getElementById(
-      "dCategoria"
-    )
-    .value =
+  document.getElementById("dCategoria").value =
     s.categoria || "altro";
 
-
-  document
-    .getElementById(
-      "dDescrizione"
-    )
-    .value =
+  document.getElementById("dDescrizione").value =
     s.descrizione || "";
 
-
-  document
-    .getElementById(
-      "dNome"
-    )
-    .value =
+  document.getElementById("dNome").value =
     s.nome || "";
 
-
-  document
-    .getElementById(
-      "dTelefono"
-    )
-    .value =
+  document.getElementById("dTelefono").value =
     s.telefono || "";
 
-
-  document
-    .getElementById(
-      "dEmail"
-    )
-    .value =
+  document.getElementById("dEmail").value =
     s.email || "";
 
-
-  document
-    .getElementById(
-      "dStato"
-    )
-    .value =
+  document.getElementById("dStato").value =
     s.stato || "in_attesa";
 
-
-  document
-    .getElementById(
-      "dEnte"
-    )
-    .value =
+  document.getElementById("dEnte").value =
     s.ente_destinatario || "";
 
+  document.getElementById("dDataInoltro").value =
+    dataPerInput(s.data_inoltro);
 
-  document
-    .getElementById(
-      "dDataInoltro"
-    )
-    .value =
-    dataPerInput(
-      s.data_inoltro
-    );
-
-
-  document
-    .getElementById(
-      "dProtocollo"
-    )
-    .value =
+  document.getElementById("dProtocollo").value =
     s.protocollo || "";
 
-
-  document
-    .getElementById(
-      "dNoteInterne"
-    )
-    .value =
+  document.getElementById("dNoteInterne").value =
     s.note_interne || "";
 
-
-  document
-    .getElementById(
-      "dRispostaEnte"
-    )
-    .value =
+  document.getElementById("dRispostaEnte").value =
     s.risposta_ente || "";
 
+  document.getElementById("dDataRisposta").value =
+    dataPerInput(s.data_risposta_ente);
 
-  document
-    .getElementById(
-      "dDataRisposta"
-    )
-    .value =
-    dataPerInput(
-      s.data_risposta_ente
-    );
-
-
-  document
-    .getElementById(
-      "messaggioDettaglio"
-    )
-    .textContent = "";
-
+  document.getElementById("messaggioDettaglio").textContent =
+    "";
 
   const fotoBox =
-    document.getElementById(
-      "fotoBox"
-    );
-
+    document.getElementById("fotoBox");
 
   if(s.foto_url){
 
     fotoBox.innerHTML = `
 
       <label>
-        <strong>
-          📷 Fotografia allegata
-        </strong>
+        <strong>📷 Fotografia allegata</strong>
       </label>
 
       <img
@@ -2054,8 +1770,7 @@ function apriPratica(s){
 
     `;
 
-  }
-  else{
+  }else{
 
     fotoBox.innerHTML =
       "<p class='meta'>" +
@@ -2063,211 +1778,111 @@ function apriPratica(s){
       "</p>";
   }
 
-
   document
-    .getElementById(
-      "dettaglio"
-    )
-    .classList
-    .remove("hidden");
+    .getElementById("dettaglio")
+    .classList.remove("hidden");
 }
 
-
-/* =========================
-   CHIUDI
-========================= */
 
 function chiudiDettaglio(){
 
   document
-    .getElementById(
-      "dettaglio"
-    )
-    .classList
-    .add("hidden");
+    .getElementById("dettaglio")
+    .classList.add("hidden");
 
   praticaCorrente = null;
 }
 
 
-/* =========================
-   SALVA
-========================= */
+/* SALVA */
 
 async function salvaPratica(){
 
   if(!praticaCorrente)
     return;
 
-
   const messaggio =
-    document.getElementById(
-      "messaggioDettaglio"
-    );
-
+    document.getElementById("messaggioDettaglio");
 
   messaggio.textContent =
     "Salvataggio in corso...";
 
-
   const dataInoltro =
-    document
-      .getElementById(
-        "dDataInoltro"
-      )
-      .value;
-
+    document.getElementById("dDataInoltro").value;
 
   const dataRisposta =
-    document
-      .getElementById(
-        "dDataRisposta"
-      )
-      .value;
-
+    document.getElementById("dDataRisposta").value;
 
   const dati = {
 
     indirizzo:
-      document
-        .getElementById(
-          "dIndirizzo"
-        )
-        .value
-        .trim(),
+      document.getElementById("dIndirizzo").value.trim(),
 
     categoria:
-      document
-        .getElementById(
-          "dCategoria"
-        )
-        .value,
+      document.getElementById("dCategoria").value,
 
     descrizione:
-      document
-        .getElementById(
-          "dDescrizione"
-        )
-        .value
-        .trim(),
+      document.getElementById("dDescrizione").value.trim(),
 
     nome:
-      document
-        .getElementById(
-          "dNome"
-        )
-        .value
-        .trim(),
+      document.getElementById("dNome").value.trim(),
 
     telefono:
-      document
-        .getElementById(
-          "dTelefono"
-        )
-        .value
-        .trim() || null,
+      document.getElementById("dTelefono").value.trim() || null,
 
     email:
-      document
-        .getElementById(
-          "dEmail"
-        )
-        .value
-        .trim() || null,
+      document.getElementById("dEmail").value.trim() || null,
 
     stato:
-      document
-        .getElementById(
-          "dStato"
-        )
-        .value,
+      document.getElementById("dStato").value,
 
     ente_destinatario:
-      document
-        .getElementById(
-          "dEnte"
-        )
-        .value
-        .trim() || null,
+      document.getElementById("dEnte").value.trim() || null,
 
     data_inoltro:
       dataInoltro
       ?
-      new Date(
-        dataInoltro
-      ).toISOString()
+      new Date(dataInoltro).toISOString()
       :
       null,
 
     protocollo:
-      document
-        .getElementById(
-          "dProtocollo"
-        )
-        .value
-        .trim() || null,
+      document.getElementById("dProtocollo").value.trim() || null,
 
     note_interne:
-      document
-        .getElementById(
-          "dNoteInterne"
-        )
-        .value
-        .trim() || null,
+      document.getElementById("dNoteInterne").value.trim() || null,
 
     risposta_ente:
-      document
-        .getElementById(
-          "dRispostaEnte"
-        )
-        .value
-        .trim() || null,
+      document.getElementById("dRispostaEnte").value.trim() || null,
 
     data_risposta_ente:
       dataRisposta
       ?
-      new Date(
-        dataRisposta
-      ).toISOString()
+      new Date(dataRisposta).toISOString()
       :
       null
   };
 
-
   try{
 
     const r = await fetch(
-
       SUPABASE_URL +
       "/rest/v1/segnalazioni_cittadini" +
       "?id=eq." +
-      Number(
-        praticaCorrente.id
-      ),
-
+      Number(praticaCorrente.id),
       {
         method:"PATCH",
 
         headers:{
-
-          "apikey":
-            SUPABASE_KEY,
-
-          "Authorization":
-            "Bearer " + token,
-
-          "Content-Type":
-            "application/json",
-
-          "Prefer":
-            "return=minimal"
+          "apikey":SUPABASE_KEY,
+          "Authorization":"Bearer " + token,
+          "Content-Type":"application/json",
+          "Prefer":"return=minimal"
         },
 
-        body:
-          JSON.stringify(dati)
+        body:JSON.stringify(dati)
       }
     );
-
 
     if(!r.ok){
 
@@ -2275,22 +1890,18 @@ async function salvaPratica(){
         await r.text();
 
       messaggio.textContent =
-        "Errore: " +
-        errore;
+        "Errore: " + errore;
 
       return;
     }
-
 
     Object.assign(
       praticaCorrente,
       dati
     );
 
-
     messaggio.textContent =
       "✅ Pratica salvata correttamente.";
-
 
     await caricaSegnalazioni();
 
@@ -2304,9 +1915,7 @@ async function salvaPratica(){
 }
 
 
-/* =========================
-   RIFIUTA
-========================= */
+/* RIFIUTA */
 
 async function rifiutaPratica(){
 
@@ -2315,103 +1924,168 @@ async function rifiutaPratica(){
 
   const conferma =
     confirm(
-      "Vuoi contrassegnare questa segnalazione come rifiutata?"
+      "Vuoi contrassegnare questa segnalazione come rifiutata?\n\n" +
+      "La pratica NON verrà eliminata e resterà nell'archivio."
     );
 
   if(!conferma)
     return;
 
-  document
-    .getElementById(
-      "dStato"
-    )
-    .value =
+  document.getElementById("dStato").value =
     "rifiutata";
 
   await salvaPratica();
 }
 
 
-/* =========================
-   LOGOUT
-========================= */
+/* ELIMINA DEFINITIVAMENTE */
+
+async function eliminaPratica(){
+
+  if(!praticaCorrente)
+    return;
+
+  const id =
+    Number(praticaCorrente.id);
+
+  const primaConferma =
+    confirm(
+      "ATTENZIONE\n\n" +
+      "Stai per eliminare definitivamente la pratica #" +
+      id +
+      ".\n\n" +
+      "La segnalazione non comparirà più nel pannello e l'operazione non potrà essere annullata.\n\n" +
+      "Vuoi continuare?"
+    );
+
+  if(!primaConferma)
+    return;
+
+  const secondaConferma =
+    confirm(
+      "ULTIMA CONFERMA\n\n" +
+      "Eliminare definitivamente la pratica #" +
+      id +
+      "?"
+    );
+
+  if(!secondaConferma)
+    return;
+
+  const messaggio =
+    document.getElementById("messaggioDettaglio");
+
+  messaggio.textContent =
+    "Eliminazione in corso...";
+
+  try{
+
+    const r = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/segnalazioni_cittadini" +
+      "?id=eq." +
+      id,
+      {
+        method:"DELETE",
+
+        headers:{
+          "apikey":SUPABASE_KEY,
+          "Authorization":"Bearer " + token,
+          "Prefer":"return=representation"
+        }
+      }
+    );
+
+    if(!r.ok){
+
+      const errore =
+        await r.text();
+
+      messaggio.textContent =
+        "❌ Eliminazione non riuscita: " +
+        errore;
+
+      return;
+    }
+
+    const eliminate =
+      await r.json();
+
+    if(!Array.isArray(eliminate) || eliminate.length===0){
+
+      messaggio.textContent =
+        "❌ La pratica non è stata eliminata. " +
+        "Probabilmente Supabase non consente ancora l'operazione DELETE all'amministratore.";
+
+      return;
+    }
+
+    document
+      .getElementById("dettaglio")
+      .classList.add("hidden");
+
+    praticaCorrente = null;
+
+    await caricaSegnalazioni();
+
+    mostraSezione("dashboard");
+
+    alert(
+      "Pratica #" +
+      id +
+      " eliminata definitivamente."
+    );
+
+  }
+  catch(error){
+
+    messaggio.textContent =
+      "❌ Errore di connessione: " +
+      error.message;
+  }
+}
+
+
+/* LOGOUT */
 
 function logout(){
 
   token = null;
-
   praticaCorrente = null;
-
   tutteSegnalazioni = [];
 
+  document
+    .getElementById("dettaglio")
+    .classList.add("hidden");
 
   document
-    .getElementById(
-      "dettaglio"
-    )
-    .classList
-    .add("hidden");
-
+    .getElementById("adminBox")
+    .classList.add("hidden");
 
   document
-    .getElementById(
-      "adminBox"
-    )
-    .classList
-    .add("hidden");
+    .getElementById("loginBox")
+    .classList.remove("hidden");
 
+  document.getElementById("password").value =
+    "";
 
-  document
-    .getElementById(
-      "loginBox"
-    )
-    .classList
-    .remove("hidden");
-
-
-  document
-    .getElementById(
-      "password"
-    )
-    .value = "";
-
-
-  document
-    .getElementById(
-      "messaggio"
-    )
-    .textContent = "";
+  document.getElementById("messaggio").textContent =
+    "";
 }
 
 
-/* =========================
-   NOMI STATI
-========================= */
+/* STATO */
 
 function nomeStatoRaw(stato){
 
   const nomi = {
-
-    in_attesa:
-      "In attesa di verifica",
-
-    verificata:
-      "Documentazione verificata",
-
-    inoltrata:
-      "Inoltrata all'ente",
-
-    attesa_ente:
-      "In attesa dell'ente",
-
-    risolta:
-      "Risolta",
-
-    chiusa:
-      "Chiusa",
-
-    rifiutata:
-      "Rifiutata"
+    in_attesa:"In attesa di verifica",
+    verificata:"Documentazione verificata",
+    inoltrata:"Inoltrata all'ente",
+    attesa_ente:"In attesa dell'ente",
+    risolta:"Risolta",
+    chiusa:"Chiusa",
+    rifiutata:"Rifiutata"
   };
 
   return (
@@ -2422,37 +2096,35 @@ function nomeStatoRaw(stato){
 }
 
 
-/* =========================
-   NOMI CATEGORIE
-========================= */
+function classeStato(stato){
+
+  const classi = {
+    in_attesa:"stato-in_attesa",
+    verificata:"stato-verificata",
+    inoltrata:"stato-inoltrata",
+    attesa_ente:"stato-attesa_ente",
+    risolta:"stato-risolta",
+    chiusa:"stato-chiusa",
+    rifiutata:"stato-rifiutata"
+  };
+
+  return classi[stato] || "stato-rifiutata";
+}
+
+
+/* CATEGORIE */
 
 function nomeCategoria(cat){
 
   const nomi = {
-
-    strade:
-      "Strade e marciapiedi",
-
-    acqua:
-      "Acqua",
-
-    rifiuti:
-      "Rifiuti e pulizia",
-
-    illuminazione:
-      "Illuminazione pubblica",
-
-    verde:
-      "Verde pubblico",
-
-    segnaletica:
-      "Segnaletica e sicurezza",
-
-    degrado:
-      "Degrado urbano",
-
-    altro:
-      "Altro"
+    strade:"Strade e marciapiedi",
+    acqua:"Acqua",
+    rifiuti:"Rifiuti e pulizia",
+    illuminazione:"Illuminazione pubblica",
+    verde:"Verde pubblico",
+    segnaletica:"Segnaletica e sicurezza",
+    degrado:"Degrado urbano",
+    altro:"Altro"
   };
 
   return (
@@ -2463,9 +2135,7 @@ function nomeCategoria(cat){
 }
 
 
-/* =========================
-   DATA INPUT
-========================= */
+/* DATA */
 
 function dataPerInput(data){
 
@@ -2475,11 +2145,7 @@ function dataPerInput(data){
   const d =
     new Date(data);
 
-  if(
-    Number.isNaN(
-      d.getTime()
-    )
-  )
+  if(Number.isNaN(d.getTime()))
     return "";
 
   const locale =
@@ -2494,56 +2160,25 @@ function dataPerInput(data){
 }
 
 
-/* =========================
-   UTILITÀ
-========================= */
+/* UTILITÀ */
 
-function accorcia(
-  testo,
-  max
-){
+function accorcia(testo,max){
 
   if(testo.length<=max)
     return testo;
 
-  return (
-    testo.substring(
-      0,
-      max
-    ) +
-    "…"
-  );
+  return testo.substring(0,max) + "…";
 }
 
 
 function esc(v){
 
   return String(v)
-
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-
-    .replaceAll(
-      "'",
-      "&#039;"
-    );
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
 
