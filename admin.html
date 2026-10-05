@@ -134,8 +134,6 @@ button{
   color:white!important;
 }
 
-/* TITOLI */
-
 .section-title{
   margin:5px 0 15px;
 }
@@ -243,8 +241,6 @@ button{
   font-size:21px;
 }
 
-/* BADGE GENERICO */
-
 .badge{
   display:inline-block;
   padding:7px 11px;
@@ -253,8 +249,6 @@ button{
   font-weight:bold;
   margin:0 5px 7px 0;
 }
-
-/* COLORI DEGLI STATI */
 
 .stato-in_attesa{
   background:#fde8e8;
@@ -359,8 +353,6 @@ button{
   margin:10px 0 18px;
 }
 
-/* GESTIONE PRATICA */
-
 .pratica-section{
   margin-top:25px;
   padding-top:20px;
@@ -435,8 +427,6 @@ button{
   margin-top:15px;
 }
 
-/* STATISTICHE */
-
 .statistiche-riga{
   margin-bottom:17px;
 }
@@ -460,17 +450,11 @@ button{
   border-radius:10px;
 }
 
-/* MOBILE */
-
 @media(max-width:650px){
 
-  header h1{
-    font-size:24px;
-  }
+  header h1{font-size:24px}
 
-  .container{
-    padding:12px;
-  }
+  .container{padding:12px}
 
   .dashboard{
     grid-template-columns:repeat(2,1fr);
@@ -505,8 +489,6 @@ button{
     flex:1 1 100%;
   }
 }
-
-/* STAMPA */
 
 @media print{
 
@@ -550,21 +532,15 @@ button{
 
 <div class="container">
 
-<!-- LOGIN -->
-
 <div id="loginBox" class="card">
 
   <h2>Accesso amministratore</h2>
 
-  <input
-    id="email"
-    type="email"
+  <input id="email" type="email"
     placeholder="E-mail"
     autocomplete="username">
 
-  <input
-    id="password"
-    type="password"
+  <input id="password" type="password"
     placeholder="Password"
     autocomplete="current-password">
 
@@ -577,51 +553,40 @@ button{
 </div>
 
 
-<!-- ADMIN -->
-
 <div id="adminBox" class="hidden">
 
   <div class="menu">
 
-    <button id="mDashboard"
-      onclick="mostraSezione('dashboard')">
+    <button id="mDashboard" onclick="mostraSezione('dashboard')">
       🏠 Dashboard
     </button>
 
-    <button id="mSegnalazioni"
-      onclick="mostraSezione('segnalazioni')">
+    <button id="mSegnalazioni" onclick="mostraSezione('segnalazioni')">
       📥 Segnalazioni
     </button>
 
-    <button id="mCategorie"
-      onclick="mostraSezione('categorie')">
+    <button id="mCategorie" onclick="mostraSezione('categorie')">
       🗂️ Categorie
     </button>
 
-    <button id="mStati"
-      onclick="mostraSezione('stati')">
+    <button id="mStati" onclick="mostraSezione('stati')">
       🔄 Stati
     </button>
 
-    <button id="mArchivio"
-      onclick="mostraSezione('archivio')">
+    <button id="mArchivio" onclick="mostraSezione('archivio')">
       📁 Archivio
     </button>
 
-    <button id="mStatistiche"
-      onclick="mostraSezione('statistiche')">
+    <button id="mStatistiche" onclick="mostraSezione('statistiche')">
       📊 Statistiche
     </button>
 
-    <button class="logout"
-      onclick="logout()">
+    <button class="logout" onclick="logout()">
       🚪 Esci
     </button>
 
   </div>
 
-
-<!-- DASHBOARD -->
 
 <section id="sezioneDashboard">
 
@@ -639,15 +604,12 @@ button{
     <h3>🔎 Cerca una pratica</h3>
 
     <div class="ricerca">
-
       <span class="lente">🔍</span>
 
-      <input
-        id="ricercaDashboard"
+      <input id="ricercaDashboard"
         type="search"
         placeholder="Via, nome, categoria o numero pratica..."
         oninput="ricercaDaDashboard()">
-
     </div>
 
   </div>
@@ -659,8 +621,6 @@ button{
 </section>
 
 
-<!-- SEGNALAZIONI -->
-
 <section id="sezioneSegnalazioni" class="hidden">
 
   <div class="section-title">
@@ -670,19 +630,15 @@ button{
   <div class="card">
 
     <div class="ricerca">
-
       <span class="lente">🔍</span>
 
-      <input
-        id="ricerca"
+      <input id="ricerca"
         type="search"
         placeholder="Cerca per via, nome, categoria o pratica..."
         oninput="renderSegnalazioni()">
-
     </div>
 
     <select id="filtroStato" onchange="renderSegnalazioni()">
-
       <option value="">Tutti gli stati</option>
       <option value="in_attesa">In attesa di verifica</option>
       <option value="verificata">Verificate</option>
@@ -691,11 +647,9 @@ button{
       <option value="risolta">Risolte</option>
       <option value="chiusa">Chiuse</option>
       <option value="rifiutata">Rifiutate</option>
-
     </select>
 
     <select id="filtroCategoria" onchange="renderSegnalazioni()">
-
       <option value="">Tutte le categorie</option>
       <option value="strade">Strade e marciapiedi</option>
       <option value="acqua">Acqua</option>
@@ -705,7 +659,6 @@ button{
       <option value="segnaletica">Segnaletica e sicurezza</option>
       <option value="degrado">Degrado urbano</option>
       <option value="altro">Altro</option>
-
     </select>
 
   </div>
@@ -714,8 +667,6 @@ button{
 
 </section>
 
-
-<!-- CATEGORIE -->
 
 <section id="sezioneCategorie" class="hidden">
 
@@ -731,8 +682,6 @@ button{
 </section>
 
 
-<!-- STATI -->
-
 <section id="sezioneStati" class="hidden">
 
   <div class="section-title">
@@ -743,8 +692,6 @@ button{
 
 </section>
 
-
-<!-- ARCHIVIO -->
 
 <section id="sezioneArchivio" class="hidden">
 
@@ -759,8 +706,6 @@ button{
 
 </section>
 
-
-<!-- STATISTICHE -->
 
 <section id="sezioneStatistiche" class="hidden">
 
@@ -781,11 +726,8 @@ button{
 </section>
 
 </div>
-
 </div>
 
-
-<!-- DETTAGLIO PRATICA -->
 
 <div id="dettaglio" class="dettaglio hidden">
 
@@ -816,7 +758,6 @@ button{
     <label><strong>Categoria</strong></label>
 
     <select id="dCategoria">
-
       <option value="strade">Buche, strade e marciapiedi</option>
       <option value="acqua">Perdite d'acqua e problemi idrici</option>
       <option value="rifiuti">Rifiuti e pulizia</option>
@@ -825,7 +766,6 @@ button{
       <option value="segnaletica">Segnaletica e sicurezza stradale</option>
       <option value="degrado">Degrado urbano</option>
       <option value="altro">Altro</option>
-
     </select>
 
     <label><strong>Descrizione</strong></label>
@@ -863,7 +803,6 @@ button{
     <label><strong>Stato della pratica</strong></label>
 
     <select id="dStato">
-
       <option value="in_attesa">🔴 In attesa di verifica</option>
       <option value="verificata">🔵 Documentazione verificata</option>
       <option value="inoltrata">🟣 Inoltrata all'ente</option>
@@ -871,31 +810,24 @@ button{
       <option value="risolta">🟢 Risolta</option>
       <option value="chiusa">⚫ Chiusa</option>
       <option value="rifiutata">⚪ Rifiutata</option>
-
     </select>
 
     <label><strong>Ente / ufficio destinatario</strong></label>
 
-    <input
-      id="dEnte"
+    <input id="dEnte"
       placeholder="Es. Comune di Canicattì - Ufficio Tecnico, AICA...">
 
     <label><strong>Data di inoltro</strong></label>
-
-    <input
-      id="dDataInoltro"
-      type="datetime-local">
+    <input id="dDataInoltro" type="datetime-local">
 
     <label><strong>Protocollo / riferimento</strong></label>
 
-    <input
-      id="dProtocollo"
+    <input id="dProtocollo"
       placeholder="Numero protocollo, PEC o altro riferimento">
 
     <label><strong>Note interne</strong></label>
 
-    <textarea
-      id="dNoteInterne"
+    <textarea id="dNoteInterne"
       placeholder="Annotazioni interne sulla gestione della pratica..."></textarea>
 
   </div>
@@ -906,15 +838,11 @@ button{
     <h3>🏛️ Risposta dell'ente</h3>
 
     <label><strong>Data della risposta</strong></label>
-
-    <input
-      id="dDataRisposta"
-      type="datetime-local">
+    <input id="dDataRisposta" type="datetime-local">
 
     <label><strong>Risposta / esito comunicato</strong></label>
 
-    <textarea
-      id="dRispostaEnte"
+    <textarea id="dRispostaEnte"
       placeholder="Inserisci la risposta ricevuta dall'ente o l'esito della pratica..."></textarea>
 
   </div>
@@ -956,7 +884,6 @@ button{
   <p id="messaggioDettaglio"></p>
 
 </div>
-
 </div>
 
 
@@ -967,6 +894,8 @@ const SUPABASE_URL =
 
 const SUPABASE_KEY =
 "sb_publishable_5usTyC1lIfP6ykIY456Glw_iJdy6NvP";
+
+const BUCKET_FOTO = "segnalazioni-foto";
 
 let token = null;
 let praticaCorrente = null;
@@ -1038,20 +967,17 @@ async function login(){
 
     messaggio.textContent = "";
 
-    document
-      .getElementById("loginBox")
+    document.getElementById("loginBox")
       .classList.add("hidden");
 
-    document
-      .getElementById("adminBox")
+    document.getElementById("adminBox")
       .classList.remove("hidden");
 
     await caricaSegnalazioni();
 
     mostraSezione("dashboard");
 
-  }
-  catch(error){
+  }catch(error){
 
     messaggio.textContent =
       "Errore di connessione: " +
@@ -1096,8 +1022,7 @@ async function caricaSegnalazioni(){
 
     aggiornaInterfaccia();
 
-  }
-  catch(error){
+  }catch(error){
 
     alert(
       "Errore di connessione: " +
@@ -1133,8 +1058,7 @@ function mostraSezione(nome){
 
   sezioni.forEach(s=>{
 
-    document
-      .getElementById("sezione"+s)
+    document.getElementById("sezione"+s)
       .classList.add("hidden");
 
     const bottone =
@@ -1148,8 +1072,7 @@ function mostraSezione(nome){
     nome.charAt(0).toUpperCase() +
     nome.slice(1);
 
-  document
-    .getElementById("sezione"+nomeMaiuscolo)
+  document.getElementById("sezione"+nomeMaiuscolo)
     .classList.remove("hidden");
 
   const b =
@@ -1181,47 +1104,17 @@ function renderDashboard(){
     document.getElementById("dashboardCards");
 
   box.innerHTML =
-    statCard(
-      tutteSegnalazioni.length,
-      "Totale pratiche",
-      "totale",
-      ""
-    )
+    statCard(tutteSegnalazioni.length,"Totale pratiche","totale","")
     +
-    statCard(
-      contaStato("in_attesa"),
-      "Da verificare",
-      "nuove",
-      "in_attesa"
-    )
+    statCard(contaStato("in_attesa"),"Da verificare","nuove","in_attesa")
     +
-    statCard(
-      contaStato("verificata"),
-      "Verificate",
-      "verificate",
-      "verificata"
-    )
+    statCard(contaStato("verificata"),"Verificate","verificate","verificata")
     +
-    statCard(
-      contaStato("inoltrata"),
-      "Inoltrate",
-      "inoltrate",
-      "inoltrata"
-    )
+    statCard(contaStato("inoltrata"),"Inoltrate","inoltrate","inoltrata")
     +
-    statCard(
-      contaStato("attesa_ente"),
-      "In attesa ente",
-      "attesa",
-      "attesa_ente"
-    )
+    statCard(contaStato("attesa_ente"),"In attesa ente","attesa","attesa_ente")
     +
-    statCard(
-      contaStato("risolta"),
-      "Risolte",
-      "risolte",
-      "risolta"
-    );
+    statCard(contaStato("risolta"),"Risolte","risolte","risolta");
 
   const ultime =
     tutteSegnalazioni.slice(0,5);
@@ -1231,10 +1124,8 @@ function renderDashboard(){
 
   contenitore.innerHTML =
     ultime.length
-    ?
-    ultime.map(cardHTML).join("")
-    :
-    "<div class='card empty'>Nessuna segnalazione.</div>";
+    ? ultime.map(cardHTML).join("")
+    : "<div class='card empty'>Nessuna segnalazione.</div>";
 
   collegaPulsanti(contenitore);
 }
@@ -1243,17 +1134,11 @@ function renderDashboard(){
 function statCard(numero,titolo,classe,stato){
 
   return `
-    <div
-      class="stat ${classe}"
+    <div class="stat ${classe}"
       onclick="vaiAStato('${stato}')">
 
-      <span class="numero">
-        ${numero}
-      </span>
-
-      <span class="titolo">
-        ${titolo}
-      </span>
+      <span class="numero">${numero}</span>
+      <span class="titolo">${titolo}</span>
 
     </div>
   `;
@@ -1308,10 +1193,7 @@ function renderSegnalazioni(){
     document.getElementById("elenco");
 
   const ricerca =
-    (
-      document.getElementById("ricerca").value ||
-      ""
-    )
+    (document.getElementById("ricerca").value || "")
     .toLowerCase()
     .trim();
 
@@ -1334,6 +1216,7 @@ function renderSegnalazioni(){
 
         const testo = [
           s.id,
+          s.numero_pratica,
           s.indirizzo,
           s.descrizione,
           s.nome,
@@ -1376,6 +1259,11 @@ function renderSegnalazioni(){
 
 function cardHTML(s){
 
+  const riferimento =
+    s.numero_pratica
+    ? esc(s.numero_pratica)
+    : "#" + Number(s.id);
+
   return `
 
     <div class="card segnalazione">
@@ -1389,19 +1277,11 @@ function cardHTML(s){
       </span>
 
       <h3>
-        ${esc(
-          s.indirizzo ||
-          "Indirizzo non indicato"
-        )}
+        ${esc(s.indirizzo || "Indirizzo non indicato")}
       </h3>
 
       <p>
-        ${esc(
-          accorcia(
-            s.descrizione || "",
-            160
-          )
-        )}
+        ${esc(accorcia(s.descrizione || "",160))}
       </p>
 
       ${
@@ -1416,14 +1296,13 @@ function cardHTML(s){
 
       <p class="meta">
 
-        Pratica #${Number(s.id)}
+        Pratica ${riferimento}
 
         ${
           s.data_invio
           ?
           " · " +
-          new Date(s.data_invio)
-            .toLocaleString("it-IT")
+          new Date(s.data_invio).toLocaleString("it-IT")
           :
           ""
         }
@@ -1444,26 +1323,22 @@ function cardHTML(s){
 
 function collegaPulsanti(contenitore){
 
-  contenitore
-    .querySelectorAll(".apri")
+  contenitore.querySelectorAll(".apri")
     .forEach(btn=>{
 
-      btn.addEventListener(
-        "click",
-        ()=>{
+      btn.addEventListener("click",()=>{
 
-          const id =
-            Number(btn.dataset.id);
+        const id =
+          Number(btn.dataset.id);
 
-          const s =
-            tutteSegnalazioni.find(
-              x=>Number(x.id)===id
-            );
+        const s =
+          tutteSegnalazioni.find(
+            x=>Number(x.id)===id
+          );
 
-          if(s)
-            apriPratica(s);
-        }
-      );
+        if(s)
+          apriPratica(s);
+      });
 
     });
 }
@@ -1497,13 +1372,10 @@ function renderCategorie(){
 
       return `
 
-        <div
-          class="categoria-box"
+        <div class="categoria-box"
           onclick="vaiACategoria('${c[0]}')">
 
-          <strong>
-            ${c[1]} ${c[2]}
-          </strong>
+          <strong>${c[1]} ${c[2]}</strong>
 
           <span class="cat-numero">
             ${numero}
@@ -1555,8 +1427,7 @@ function renderStati(){
   document.getElementById("statiGrid").innerHTML =
     stati.map(s=>`
 
-      <div
-        class="categoria-box"
+      <div class="categoria-box"
         onclick="vaiAStato('${s[0]}')">
 
         <strong>
@@ -1678,8 +1549,7 @@ function renderBarre(id,dati){
           </strong>
 
           <div class="barra">
-            <div
-              class="barra-interna"
+            <div class="barra-interna"
               style="width:${percentuale}%">
             </div>
           </div>
@@ -1692,14 +1562,46 @@ function renderBarre(id,dati){
 }
 
 
+/* URL FOTO */
+
+function costruisciUrlFoto(percorso){
+
+  if(!percorso)
+    return "";
+
+  if(
+    percorso.startsWith("http://") ||
+    percorso.startsWith("https://")
+  ){
+    return percorso;
+  }
+
+  const percorsoPulito =
+    percorso.replace(/^\/+/,"");
+
+  return (
+    SUPABASE_URL +
+    "/storage/v1/object/public/" +
+    BUCKET_FOTO +
+    "/" +
+    percorsoPulito
+  );
+}
+
+
 /* APRI PRATICA */
 
 function apriPratica(s){
 
   praticaCorrente = s;
 
+  const riferimento =
+    s.numero_pratica
+    ? s.numero_pratica
+    : "#" + s.id;
+
   document.getElementById("numeroPratica").textContent =
-    "Pratica #" + s.id +
+    "Pratica " + riferimento +
     (
       s.data_invio
       ?
@@ -1757,6 +1659,9 @@ function apriPratica(s){
 
   if(s.foto_url){
 
+    const fotoUrlCompleta =
+      costruisciUrlFoto(s.foto_url);
+
     fotoBox.innerHTML = `
 
       <label>
@@ -1765,7 +1670,7 @@ function apriPratica(s){
 
       <img
         class="foto"
-        src="${escAttr(s.foto_url)}"
+        src="${escAttr(fotoUrlCompleta)}"
         alt="Fotografia della segnalazione">
 
     `;
@@ -1778,16 +1683,14 @@ function apriPratica(s){
       "</p>";
   }
 
-  document
-    .getElementById("dettaglio")
+  document.getElementById("dettaglio")
     .classList.remove("hidden");
 }
 
 
 function chiudiDettaglio(){
 
-  document
-    .getElementById("dettaglio")
+  document.getElementById("dettaglio")
     .classList.add("hidden");
 
   praticaCorrente = null;
@@ -1841,10 +1744,8 @@ async function salvaPratica(){
 
     data_inoltro:
       dataInoltro
-      ?
-      new Date(dataInoltro).toISOString()
-      :
-      null,
+      ? new Date(dataInoltro).toISOString()
+      : null,
 
     protocollo:
       document.getElementById("dProtocollo").value.trim() || null,
@@ -1857,10 +1758,8 @@ async function salvaPratica(){
 
     data_risposta_ente:
       dataRisposta
-      ?
-      new Date(dataRisposta).toISOString()
-      :
-      null
+      ? new Date(dataRisposta).toISOString()
+      : null
   };
 
   try{
@@ -1905,8 +1804,7 @@ async function salvaPratica(){
 
     await caricaSegnalazioni();
 
-  }
-  catch(error){
+  }catch(error){
 
     messaggio.textContent =
       "Errore di connessione: " +
@@ -1938,7 +1836,7 @@ async function rifiutaPratica(){
 }
 
 
-/* ELIMINA DEFINITIVAMENTE */
+/* ELIMINA */
 
 async function eliminaPratica(){
 
@@ -2020,8 +1918,7 @@ async function eliminaPratica(){
       return;
     }
 
-    document
-      .getElementById("dettaglio")
+    document.getElementById("dettaglio")
       .classList.add("hidden");
 
     praticaCorrente = null;
@@ -2036,8 +1933,7 @@ async function eliminaPratica(){
       " eliminata definitivamente."
     );
 
-  }
-  catch(error){
+  }catch(error){
 
     messaggio.textContent =
       "❌ Errore di connessione: " +
@@ -2054,16 +1950,13 @@ function logout(){
   praticaCorrente = null;
   tutteSegnalazioni = [];
 
-  document
-    .getElementById("dettaglio")
+  document.getElementById("dettaglio")
     .classList.add("hidden");
 
-  document
-    .getElementById("adminBox")
+  document.getElementById("adminBox")
     .classList.add("hidden");
 
-  document
-    .getElementById("loginBox")
+  document.getElementById("loginBox")
     .classList.remove("hidden");
 
   document.getElementById("password").value =
