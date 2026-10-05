@@ -89,8 +89,6 @@ button{
   display:none!important;
 }
 
-/* LOGIN */
-
 .login{
   width:100%;
   background:var(--blu);
@@ -101,8 +99,6 @@ button{
   margin-top:12px;
   color:#b00020;
 }
-
-/* MENU */
 
 .menu{
   display:flex;
@@ -147,8 +143,6 @@ button{
   font-size:14px;
 }
 
-/* DASHBOARD */
-
 .dashboard{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -190,8 +184,6 @@ button{
 .stat.attesa .numero{color:var(--arancio)}
 .stat.risolte .numero{color:var(--verde)}
 
-/* RICERCA */
-
 .ricerca{
   position:relative;
 }
@@ -206,8 +198,6 @@ button{
   left:15px;
   top:15px;
 }
-
-/* CATEGORIE */
 
 .categorie-grid{
   display:grid;
@@ -233,8 +223,6 @@ button{
   color:var(--blu);
   font-weight:bold;
 }
-
-/* PRATICHE */
 
 .segnalazione h3{
   margin:8px 0;
@@ -309,8 +297,6 @@ button{
   padding:35px 15px;
 }
 
-/* DETTAGLIO */
-
 .dettaglio{
   position:fixed;
   inset:0;
@@ -344,8 +330,6 @@ button{
   color:#222;
 }
 
-/* FOTO SINGOLA / COMPATIBILITÀ */
-
 .foto{
   width:100%;
   max-height:450px;
@@ -353,53 +337,6 @@ button{
   background:#eee;
   border-radius:10px;
   margin:10px 0 18px;
-}
-
-/* GALLERIA MULTIFOTO */
-
-.galleria-foto{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-  margin-top:12px;
-  margin-bottom:20px;
-}
-
-.foto-item{
-  background:#f4f6f8;
-  border-radius:12px;
-  overflow:hidden;
-  border:1px solid #e1e5e9;
-}
-
-.foto-item .foto{
-  width:100%;
-  height:260px;
-  max-height:none;
-  object-fit:contain;
-  margin:0;
-  background:#eee;
-  border-radius:0;
-  display:block;
-}
-
-.numero-foto{
-  padding:9px 10px;
-  text-align:center;
-  font-size:13px;
-  font-weight:bold;
-  color:#555;
-  background:white;
-}
-
-.errore-foto{
-  min-height:180px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  text-align:center;
-  color:#842029;
 }
 
 .pratica-section{
@@ -537,15 +474,6 @@ button{
   .actions button{
     flex:1 1 100%;
   }
-
-  .galleria-foto{
-    grid-template-columns:1fr;
-  }
-
-  .foto-item .foto{
-    height:auto;
-    max-height:420px;
-  }
 }
 
 @media print{
@@ -610,6 +538,7 @@ button{
 
 </div>
 
+
 <div id="adminBox" class="hidden">
 
   <div class="menu">
@@ -644,6 +573,7 @@ button{
 
   </div>
 
+
 <section id="sezioneDashboard">
 
   <div class="section-title">
@@ -675,6 +605,7 @@ button{
   <div id="ultimeSegnalazioni"></div>
 
 </section>
+
 
 <section id="sezioneSegnalazioni" class="hidden">
 
@@ -722,6 +653,7 @@ button{
 
 </section>
 
+
 <section id="sezioneCategorie" class="hidden">
 
   <div class="section-title">
@@ -735,6 +667,7 @@ button{
 
 </section>
 
+
 <section id="sezioneStati" class="hidden">
 
   <div class="section-title">
@@ -744,6 +677,7 @@ button{
   <div id="statiGrid" class="categorie-grid"></div>
 
 </section>
+
 
 <section id="sezioneArchivio" class="hidden">
 
@@ -757,6 +691,7 @@ button{
   <div id="archivio"></div>
 
 </section>
+
 
 <section id="sezioneStatistiche" class="hidden">
 
@@ -779,6 +714,7 @@ button{
 </div>
 </div>
 
+
 <div id="dettaglio" class="dettaglio hidden">
 
 <div class="dettaglio-box">
@@ -796,6 +732,7 @@ button{
   <p id="numeroPratica" class="meta"></p>
 
   <div id="fotoBox"></div>
+
 
   <div class="pratica-section">
 
@@ -822,6 +759,7 @@ button{
 
   </div>
 
+
   <div class="pratica-section">
 
     <h3>👤 Dati del cittadino</h3>
@@ -836,6 +774,7 @@ button{
     <input id="dEmail">
 
   </div>
+
 
   <div class="pratica-section">
 
@@ -879,6 +818,7 @@ button{
 
   </div>
 
+
   <div class="pratica-section">
 
     <h3>🏛️ Risposta dell'ente</h3>
@@ -892,6 +832,7 @@ button{
       placeholder="Inserisci la risposta ricevuta dall'ente o l'esito della pratica..."></textarea>
 
   </div>
+
 
   <div class="actions">
 
@@ -908,6 +849,7 @@ button{
     </button>
 
   </div>
+
 
   <div class="danger-zone">
 
@@ -930,6 +872,7 @@ button{
 </div>
 </div>
 
+
 <script>
 
 const SUPABASE_URL =
@@ -939,6 +882,9 @@ const SUPABASE_KEY =
 "sb_publishable_5usTyC1lIfP6ykIY456Glw_iJdy6NvP";
 
 const BUCKET_FOTO = "segnalazioni-foto";
+
+const EMAIL_FUNCTION_URL =
+SUPABASE_URL + "/functions/v1/invia-email";
 
 let token = null;
 let praticaCorrente = null;
@@ -1632,77 +1578,22 @@ function costruisciUrlFoto(percorso){
 }
 
 
-/* RECUPERA TUTTE LE FOTO */
+/* FOTO MULTIPLE */
 
-function recuperaFotografie(s){
+function ottieniFoto(s){
 
-  let fotografie = [];
+  const foto = [];
 
-  /*
-   * Nuovo sistema:
-   * foto_urls contiene l'elenco delle fotografie.
-   */
+  if(s.foto_url)
+    foto.push(s.foto_url);
 
-  if(Array.isArray(s.foto_urls)){
+  if(s.foto_url_2)
+    foto.push(s.foto_url_2);
 
-    fotografie =
-      s.foto_urls.filter(foto => foto);
+  if(s.foto_url_3)
+    foto.push(s.foto_url_3);
 
-  }else if(
-    typeof s.foto_urls === "string" &&
-    s.foto_urls.trim() !== ""
-  ){
-
-    /*
-     * Nel caso Supabase restituisca il campo
-     * sotto forma di stringa.
-     */
-
-    try{
-
-      const parsed =
-        JSON.parse(s.foto_urls);
-
-      if(Array.isArray(parsed)){
-
-        fotografie =
-          parsed.filter(foto => foto);
-
-      }else{
-
-        fotografie = [
-          s.foto_urls
-        ];
-
-      }
-
-    }catch(e){
-
-      fotografie = [
-        s.foto_urls
-      ];
-
-    }
-
-  }
-
-  /*
-   * Compatibilità con le vecchie pratiche.
-   * Se foto_urls non esiste utilizziamo foto_url.
-   */
-
-  if(
-    fotografie.length === 0 &&
-    s.foto_url
-  ){
-
-    fotografie = [
-      s.foto_url
-    ];
-
-  }
-
-  return fotografie;
+  return foto.filter(Boolean);
 }
 
 
@@ -1774,64 +1665,36 @@ function apriPratica(s){
   const fotoBox =
     document.getElementById("fotoBox");
 
-  const fotografie =
-    recuperaFotografie(s);
+  const foto =
+    ottieniFoto(s);
 
-  if(fotografie.length > 0){
+  if(foto.length){
 
     fotoBox.innerHTML = `
 
-      <div style="margin-top:20px">
+      <label>
+        <strong>📷 Fotografie allegate (${foto.length})</strong>
+      </label>
 
-        <label>
-          <strong>
-            📷 ${
-              fotografie.length === 1
-              ? "Fotografia allegata"
-              : fotografie.length + " fotografie allegate"
-            }
-          </strong>
-        </label>
+      ${foto.map((percorso,index)=>{
 
-        <div class="galleria-foto">
+        const url =
+          costruisciUrlFoto(percorso);
 
-          ${
-            fotografie.map((foto,index)=>{
+        return `
+          <div>
+            <p class="meta">
+              Foto ${index + 1}
+            </p>
 
-              const fotoUrlCompleta =
-                costruisciUrlFoto(foto);
+            <img
+              class="foto"
+              src="${escAttr(url)}"
+              alt="Fotografia ${index + 1} della segnalazione">
+          </div>
+        `;
 
-              return `
-
-                <div class="foto-item">
-
-                  <img
-                    class="foto"
-                    src="${escAttr(fotoUrlCompleta)}"
-                    alt="Fotografia ${index + 1} della segnalazione"
-                    loading="lazy"
-                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-
-                  <div
-                    class="errore-foto"
-                    style="display:none;">
-                    ⚠️ Impossibile visualizzare la fotografia ${index + 1}
-                  </div>
-
-                  <div class="numero-foto">
-                    Foto ${index + 1}
-                  </div>
-
-                </div>
-
-              `;
-
-            }).join("")
-          }
-
-        </div>
-
-      </div>
+      }).join("")}
 
     `;
 
@@ -1839,7 +1702,7 @@ function apriPratica(s){
 
     fotoBox.innerHTML =
       "<p class='meta'>" +
-      "📷 Nessuna fotografia allegata." +
+      "Nessuna fotografia allegata." +
       "</p>";
   }
 
@@ -1857,7 +1720,7 @@ function chiudiDettaglio(){
 }
 
 
-/* SALVA */
+/* SALVA + EMAIL AUTOMATICA */
 
 async function salvaPratica(){
 
@@ -1866,6 +1729,15 @@ async function salvaPratica(){
 
   const messaggio =
     document.getElementById("messaggioDettaglio");
+
+  const vecchioStato =
+    praticaCorrente.stato || "in_attesa";
+
+  const nuovoStato =
+    document.getElementById("dStato").value;
+
+  const statoCambiato =
+    vecchioStato !== nuovoStato;
 
   messaggio.textContent =
     "Salvataggio in corso...";
@@ -1897,7 +1769,7 @@ async function salvaPratica(){
       document.getElementById("dEmail").value.trim() || null,
 
     stato:
-      document.getElementById("dStato").value,
+      nuovoStato,
 
     ente_destinatario:
       document.getElementById("dEnte").value.trim() || null,
@@ -1924,6 +1796,8 @@ async function salvaPratica(){
 
   try{
 
+    /* SALVA NEL DATABASE */
+
     const r = await fetch(
       SUPABASE_URL +
       "/rest/v1/segnalazioni_cittadini" +
@@ -1949,25 +1823,140 @@ async function salvaPratica(){
         await r.text();
 
       messaggio.textContent =
-        "Errore: " + errore;
+        "❌ Errore durante il salvataggio: " +
+        errore;
 
       return;
     }
+
+
+    /* EMAIL SOLO QUANDO CAMBIA LO STATO */
+
+    let emailInviata = false;
+    let erroreEmail = false;
+
+    if(
+      statoCambiato &&
+      dati.email
+    ){
+
+      messaggio.textContent =
+        "Pratica salvata. Invio aggiornamento al cittadino...";
+
+      try{
+
+        const rispostaEmail =
+          await fetch(
+            EMAIL_FUNCTION_URL,
+            {
+              method:"POST",
+
+              headers:{
+                "Content-Type":"application/json"
+              },
+
+              body:JSON.stringify({
+
+                email:
+                  dati.email,
+
+                nome:
+                  dati.nome,
+
+                numero_pratica:
+                  praticaCorrente.numero_pratica ||
+                  ("#" + praticaCorrente.id),
+
+                stato:
+                  nuovoStato,
+
+                oggetto:
+                  nomeCategoria(dati.categoria) +
+                  " – " +
+                  dati.indirizzo,
+
+                messaggio:
+                  dati.descrizione,
+
+                ente:
+                  dati.ente_destinatario
+
+              })
+            }
+          );
+
+        if(rispostaEmail.ok){
+
+          const risultato =
+            await rispostaEmail.json();
+
+          emailInviata =
+            risultato.success === true;
+
+          if(!emailInviata)
+            erroreEmail = true;
+
+        }else{
+
+          erroreEmail = true;
+
+          console.error(
+            "Errore email:",
+            await rispostaEmail.text()
+          );
+        }
+
+      }catch(error){
+
+        erroreEmail = true;
+
+        console.error(
+          "Errore invio aggiornamento email:",
+          error
+        );
+      }
+    }
+
 
     Object.assign(
       praticaCorrente,
       dati
     );
 
-    messaggio.textContent =
-      "✅ Pratica salvata correttamente.";
+
+    if(statoCambiato){
+
+      if(!dati.email){
+
+        messaggio.textContent =
+          "✅ Pratica salvata. Lo stato è stato aggiornato, " +
+          "ma non è presente l'indirizzo email del cittadino.";
+
+      }else if(emailInviata){
+
+        messaggio.textContent =
+          "✅ Pratica salvata e cittadino informato via email.";
+
+      }else if(erroreEmail){
+
+        messaggio.textContent =
+          "⚠️ Pratica salvata correttamente, ma non è stato possibile " +
+          "inviare l'email al cittadino.";
+
+      }
+
+    }else{
+
+      messaggio.textContent =
+        "✅ Pratica salvata correttamente.";
+    }
 
     await caricaSegnalazioni();
 
   }catch(error){
 
     messaggio.textContent =
-      "Errore di connessione: " +
+      "❌ Errore di connessione: " +
       error.message;
   }
 }
@@ -2012,7 +2001,8 @@ async function eliminaPratica(){
       "Stai per eliminare definitivamente la pratica #" +
       id +
       ".\n\n" +
-      "La segnalazione non comparirà più nel pannello e l'operazione non potrà essere annullata.\n\n" +
+      "La segnalazione non comparirà più nel pannello e " +
+      "l'operazione non potrà essere annullata.\n\n" +
       "Vuoi continuare?"
     );
 
@@ -2073,7 +2063,8 @@ async function eliminaPratica(){
 
       messaggio.textContent =
         "❌ La pratica non è stata eliminata. " +
-        "Probabilmente Supabase non consente ancora l'operazione DELETE all'amministratore.";
+        "Probabilmente Supabase non consente ancora " +
+        "l'operazione DELETE all'amministratore.";
 
       return;
     }
